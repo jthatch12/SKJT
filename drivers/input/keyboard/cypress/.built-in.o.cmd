@@ -1,0 +1,1 @@
+cmd_drivers/input/keyboard/cypress/built-in.o :=  /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL    -r -o drivers/input/keyboard/cypress/built-in.o drivers/input/keyboard/cypress/cypress-touchkey-gm.o drivers/input/keyboard/cypress/issp_driver_routines.o drivers/input/keyboard/cypress/issp_main.o drivers/input/keyboard/cypress/issp_routines.o 

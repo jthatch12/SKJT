@@ -1,0 +1,1 @@
+cmd_drivers/net/usb/asix.ko := /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL -r  -T /home/thatch/android/kernel/Siyah/scripts/module-common.lds --build-id -T /home/thatch/android/kernel/Siyah/scripts/module-common.lds -o drivers/net/usb/asix.ko drivers/net/usb/asix.o drivers/net/usb/asix.mod.o

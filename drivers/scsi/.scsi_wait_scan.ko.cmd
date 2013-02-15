@@ -1,0 +1,1 @@
+cmd_drivers/scsi/scsi_wait_scan.ko := /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL -r  -T /home/thatch/android/kernel/Siyah/scripts/module-common.lds --build-id -T /home/thatch/android/kernel/Siyah/scripts/module-common.lds -o drivers/scsi/scsi_wait_scan.ko drivers/scsi/scsi_wait_scan.o drivers/scsi/scsi_wait_scan.mod.o

@@ -1,0 +1,1 @@
+cmd_drivers/staging/generic_serial/built-in.o :=  rm -f drivers/staging/generic_serial/built-in.o; /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ar rcsD drivers/staging/generic_serial/built-in.o
