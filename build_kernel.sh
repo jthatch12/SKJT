@@ -3,7 +3,7 @@
 # location
 export KERNELDIR=`readlink -f .`
 export PARENT_DIR=`readlink -f ..`
-export INITRAMFS_SOURCE=`readlink -f ${KERNELDIR}/../initramfs3`
+export INITRAMFS_SOURCE=`readlink -f /home/thatch/android/kernel/Siyah/initramfs3`
 export INITRAMFS_TMP="/tmp/initramfs-source"
 
 # kernel
@@ -154,7 +154,7 @@ if [ -e ${KERNELDIR}/arch/arm/boot/zImage ]; then
 	GETVER=`grep 'Siyah-.*-V' arch/arm/configs/${KERNEL_CONFIG} | sed 's/.*".//g' | sed 's/-I.*//g'`
 	cp ${KERNELDIR}/zImage /${KERNELDIR}/READY-JB/boot/
 	cd ${KERNELDIR}/READY-JB/
-	zip -r Kernel_${GETVER}-`date +"[%H-%M]-[%d-%m]-ICS-JB-SGII-PWR-CORE"`.zip .
+	zip -r Kernel_${GETVER}-`date +"Siyah-JT-[%H-%M]-[%d-%m]"`.zip .
 	STATUS=`adb get-state`;
 	if [ "$STATUS" == "device" ]; then
 		read -p "push kernel to android (y/n)?"
