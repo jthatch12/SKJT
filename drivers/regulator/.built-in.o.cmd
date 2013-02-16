@@ -1,1 +1,0 @@
-cmd_drivers/regulator/built-in.o :=  /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL    -r -o drivers/regulator/built-in.o drivers/regulator/core.o drivers/regulator/dummy.o drivers/regulator/fixed.o drivers/regulator/max8997.o 

@@ -11811,8 +11811,9 @@
 #define __enabled_CONFIG_SND_PCM_OSS_PLUGINS_MODULE 0
 #define __enabled_CONFIG_FTRACE_SELFTEST 0
 #define __enabled_CONFIG_FTRACE_SELFTEST_MODULE 0
-#define __enabled_CONFIG_PN544_NFC 0
+#define __enabled_CONFIG_PN544_NFC 1
 #define __enabled_CONFIG_PN544_NFC_MODULE 0
+#define CONFIG_PN544_NFC 1
 #define __enabled_CONFIG_ACE_BC 0
 #define __enabled_CONFIG_ACE_BC_MODULE 0
 #define __enabled_CONFIG_SCSI_CUMANA_1 0
@@ -12751,7 +12752,7 @@
 #define __enabled_CONFIG_PARPORT_GSC_MODULE 0
 #define __enabled_CONFIG_CSB726_CSB701 0
 #define __enabled_CONFIG_CSB726_CSB701_MODULE 0
-#define CONFIG_LOCALVERSION "Siyah-1.99-JT"
+#define CONFIG_LOCALVERSION "Siyah-2.0-JT"
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING 0
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING_MODULE 0
 #define __enabled_CONFIG_VIDEO_DAVINCI_VPIF 0
@@ -13869,8 +13870,9 @@
 #define __enabled_CONFIG_LOCALVERSION_AUTO_MODULE 0
 #define __enabled_CONFIG_SCSI_ARCMSR 0
 #define __enabled_CONFIG_SCSI_ARCMSR_MODULE 0
-#define __enabled_CONFIG_NFC_DEVICES 0
+#define __enabled_CONFIG_NFC_DEVICES 1
 #define __enabled_CONFIG_NFC_DEVICES_MODULE 0
+#define CONFIG_NFC_DEVICES 1
 #define __enabled_CONFIG_MACH_NET2BIG_V2 0
 #define __enabled_CONFIG_MACH_NET2BIG_V2_MODULE 0
 #define __enabled_CONFIG_COMEDI_AMPLC_DIO200 0
@@ -17661,9 +17663,8 @@
 #define __enabled_CONFIG_BUSFREQ_DEBUG_MODULE 0
 #define __enabled_CONFIG_ATA_PIIX 0
 #define __enabled_CONFIG_ATA_PIIX_MODULE 0
-#define __enabled_CONFIG_SENSORS_EXYNOS4_TMU 1
+#define __enabled_CONFIG_SENSORS_EXYNOS4_TMU 0
 #define __enabled_CONFIG_SENSORS_EXYNOS4_TMU_MODULE 0
-#define CONFIG_SENSORS_EXYNOS4_TMU 1
 #define __enabled_CONFIG_B43LEGACY 0
 #define __enabled_CONFIG_B43LEGACY_MODULE 0
 #define __enabled_CONFIG_MACH_QSD8X50A_ST1_5 0

@@ -1,1 +1,0 @@
-cmd_drivers/media/video/samsung/mali/built-in.o :=  /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL    -r -o drivers/media/video/samsung/mali/built-in.o drivers/media/video/samsung/mali/mali.o 
