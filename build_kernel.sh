@@ -9,7 +9,7 @@ export INITRAMFS_TMP="/tmp/initramfs-source"
 # kernel
 export ARCH=arm
 export USE_SEC_FIPS_MODE=true
-export KERNEL_CONFIG="aj_defconfig"
+export KERNEL_CONFIG="jt_defconfig"
 
 # build script
 export USER=`whoami`

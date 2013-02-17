@@ -1,2 +1,2 @@
-cp arch/arm/configs/aj_defconfig .config
+cp arch/arm/configs/jt_defconfig .config
 
