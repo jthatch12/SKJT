@@ -194,12 +194,6 @@ module_param(gpu_power_state, int, S_IRUSR | S_IRGRP | S_IROTH); /* r--r--r-- */
 MODULE_PARM_DESC(gpu_power_state, "Mali Power State");
 extern int mali_major;
 
-#if 0
-int mali_touch_boost_level = 0;
-module_param(mali_touch_boost_level, int, S_IRUSR | S_IWUSR | S_IWGRP | S_IRGRP | S_IROTH); /* rw--rw--r-- */
-MODULE_PARM_DESC(mali_touch_boost_level, "Mali Touch Boost Level");
-#endif
-
 #endif
 
 static char mali_dev_name[] = "mali"; /* should be const, but the functions we call requires non-cost */
@@ -242,6 +236,7 @@ int new_late_mali_driver_init(void)
 	MALI_DEBUG_PRINT(2, ("Compiled: %s, time: %s.\n", __DATE__, __TIME__));
 	MALI_DEBUG_PRINT(2, ("Driver revision: %s\n", SVN_REV_STRING));
 
+	/* @@@@ todo: merge these two together? (see also exit function below) */
 	ret = _mali_dev_platform_register();
 	if (0 != ret) goto platform_register_failed;
 	ret = map_errcode(initialize_kernel_device());
@@ -294,6 +289,7 @@ void mali_driver_exit(void)
 
 	mali_platform_deinit();
 
+	/* @@@@ todo: merge these two together? (see also init function above) */
 	terminate_kernel_device();
 	_mali_dev_platform_unregister();
 
@@ -533,7 +529,6 @@ static int mali_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, 
 			err = profiling_report_sw_counters_wrapper(session_data, (_mali_uk_sw_counters_report_s __user *)arg);
 			break;
 #else
-
 		case MALI_IOC_PROFILING_START:              /* FALL-THROUGH */
 		case MALI_IOC_PROFILING_ADD_EVENT:          /* FALL-THROUGH */
 		case MALI_IOC_PROFILING_STOP:               /* FALL-THROUGH */
@@ -544,7 +539,6 @@ static int mali_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, 
 			MALI_DEBUG_PRINT(2, ("Profiling not supported\n"));
 			err = -ENOTTY;
 			break;
-
 #endif
 
 		case MALI_IOC_MEM_INIT:

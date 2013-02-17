@@ -9,20 +9,19 @@
  */
 
 #ifndef __MALI_UTGARD_H__
-#define	__MALI_UTGARD_H__ 
+#define __MALI_UTGARD_H__
 
 /** @brief MALI GPU power down using MALI in-built PMU
- * 
- * called to power down all cores 
+ *
+ * called to power down all cores
  */
 int mali_pmu_powerdown(void);
 
 
 /** @brief MALI GPU power up using MALI in-built PMU
- * 
- * called to power up all cores 
+ *
+ * called to power up all cores
  */
 int mali_pmu_powerup(void);
 
 #endif /* __MALI_UTGARD_H__ */
-
