@@ -243,6 +243,10 @@ config CPU_FREQ_DEFAULT_GOV_SKYWALKER
 	bool "skywalker"
 	select CPU_FREQ_GOV_SKYWALKER
 
+config CPU_FREQ_DEFAULT_GOV_WREXY
+	bool "wrexy"
+	select CPU_FREQ_GOV_WREXY
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -524,6 +528,9 @@ config CPU_FREQ_GOV_NIGHTMARE
 
 config CPU_FREQ_GOV_SKYWALKER
        tristate "'skywalker' cpufreq governor"
+
+config CPU_FREQ_GOV_WREXY
+       tristate "'wrexy' cpufreq governor"
 
 
 
