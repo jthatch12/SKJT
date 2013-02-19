@@ -32,7 +32,7 @@ static inline void count_compact_events(enum vm_event_item item, long delta)
 #define count_compact_events(item, delta) do { } while (0)
 #endif
 
-#if defined CONFIG_COMPACTION || defined CONFIG_DMA_CMA
+#if defined CONFIG_COMPACTION || defined CONFIG_CMA
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/compaction.h>
@@ -634,7 +634,7 @@ next_pageblock:
 	return low_pfn;
 }
 
-#endif /* CONFIG_COMPACTION || CONFIG_DMA_CMA */
+#endif /* CONFIG_COMPACTION || CONFIG_CMA */
 #ifdef CONFIG_COMPACTION
 /*
  * Based on information in the current compact_control, find blocks
@@ -1062,7 +1062,7 @@ unsigned long try_to_compact_pages(struct zonelist *zonelist,
 
 	count_compact_event(COMPACTSTALL);
 
-#ifdef CONFIG_DMA_CMA
+#ifdef CONFIG_CMA
 	if (allocflags_to_migratetype(gfp_mask) == MIGRATE_MOVABLE)
 		alloc_flags |= ALLOC_CMA;
 #endif
@@ -1175,5 +1175,34 @@ int sysctl_extfrag_handler(struct ctl_table *table, int write,
 
 	return 0;
 }
+
+#if defined(CONFIG_SYSFS) && defined(CONFIG_NUMA)
+ssize_t sysfs_compact_node(struct device *dev,
+			struct device_attribute *attr,
+			const char *buf, size_t count)
+{
+	int nid = dev->id;
+
+	if (nid >= 0 && nid < nr_node_ids && node_online(nid)) {
+		/* Flush pending updates to the LRU lists */
+		lru_add_drain_all();
+
+		compact_node(nid);
+	}
+
+	return count;
+}
+static DEVICE_ATTR(compact, S_IWUSR, NULL, sysfs_compact_node);
+
+int compaction_register_node(struct node *node)
+{
+	return device_create_file(&node->dev, &dev_attr_compact);
+}
+
+void compaction_unregister_node(struct node *node)
+{
+	return device_remove_file(&node->dev, &dev_attr_compact);
+}
+#endif /* CONFIG_SYSFS && CONFIG_NUMA */
 
 #endif /* CONFIG_COMPACTION */
