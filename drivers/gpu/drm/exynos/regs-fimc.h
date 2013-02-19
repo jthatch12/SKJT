@@ -10,8 +10,8 @@
  * published by the Free Software Foundation.
 */
 
-#ifndef SAMSUNG_REGS_FIMC_H
-#define SAMSUNG_REGS_FIMC_H
+#ifndef EXYNOS_REGS_FIMC_H
+#define EXYNOS_REGS_FIMC_H
 
 /*
  * Register part
@@ -666,4 +666,4 @@
 #define SYSREG_FIMD0WB_DEST_MASK	(0x3 << 23)
 #define SYSREG_FIMD0WB_DEST_SHIFT	23
 
-#endif /* SAMSUNG_REGS_FIMC_H */
+#endif /* EXYNOS_REGS_FIMC_H */
