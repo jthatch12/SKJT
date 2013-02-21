@@ -588,29 +588,6 @@ static void pch_udc_reconnect(struct pch_udc_dev *dev)
 }
 
 /**
- * pch_udc_reconnect() - This API initializes usb device controller,
- *						and clear the disconnect status.
- * @dev:		Reference to pch_udc_regs structure
- */
-static void pch_udc_init(struct pch_udc_dev *dev);
-static void pch_udc_reconnect(struct pch_udc_dev *dev)
-{
-	pch_udc_init(dev);
-
-	/* enable device interrupts */
-	/* pch_udc_enable_interrupts() */
-	pch_udc_bit_clr(dev, UDC_DEVIRQMSK_ADDR,
-			UDC_DEVINT_UR | UDC_DEVINT_ENUM);
-
-	/* Clear the disconnect */
-	pch_udc_bit_set(dev, UDC_DEVCTL_ADDR, UDC_DEVCTL_RES);
-	pch_udc_bit_clr(dev, UDC_DEVCTL_ADDR, UDC_DEVCTL_SD);
-	mdelay(1);
-	/* Resume USB signalling */
-	pch_udc_bit_clr(dev, UDC_DEVCTL_ADDR, UDC_DEVCTL_RES);
-}
-
-/**
  * pch_udc_vbus_session() - set or clearr the disconnect status.
  * @dev:	Reference to pch_udc_regs structure
  * @is_active:	Parameter specifying the action
@@ -3069,11 +3046,6 @@ static DEFINE_PCI_DEVICE_TABLE(pch_udc_pcidev_id) = {
 	},
 	{
 		PCI_DEVICE(PCI_VENDOR_ID_ROHM, PCI_DEVICE_ID_ML7213_IOH_UDC),
-		.class = (PCI_CLASS_SERIAL_USB << 8) | 0xfe,
-		.class_mask = 0xffffffff,
-	},
-	{
-		PCI_DEVICE(PCI_VENDOR_ID_ROHM, PCI_DEVICE_ID_ML7831_IOH_UDC),
 		.class = (PCI_CLASS_SERIAL_USB << 8) | 0xfe,
 		.class_mask = 0xffffffff,
 	},
