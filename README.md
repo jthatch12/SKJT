@@ -1,7 +1,9 @@
 SKJT
 ====
-
-clone of AJ Newkirk's Siyah
+Special thanks to:
+AJ Newkirk
+Dorimanx
+GokhanMoral
 
 
 
