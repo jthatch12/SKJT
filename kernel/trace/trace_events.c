@@ -273,6 +273,35 @@ static void put_system(struct event_subsystem *system)
 	mutex_unlock(&event_mutex);
 }
 
+static void __put_system(struct event_subsystem *system)
+{
+	struct event_filter *filter = system->filter;
+
+	WARN_ON_ONCE(system->ref_count == 0);
+	if (--system->ref_count)
+		return;
+
+	if (filter) {
+		kfree(filter->filter_string);
+		kfree(filter);
+	}
+	kfree(system->name);
+	kfree(system);
+}
+
+static void __get_system(struct event_subsystem *system)
+{
+	WARN_ON_ONCE(system->ref_count == 0);
+	system->ref_count++;
+}
+
+static void put_system(struct event_subsystem *system)
+{
+	mutex_lock(&event_mutex);
+	__put_system(system);
+	mutex_unlock(&event_mutex);
+}
+
 /*
  * __ftrace_set_clr_event(NULL, NULL, NULL, set) will set/unset all events.
  */

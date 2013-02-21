@@ -659,7 +659,7 @@ static void __cpuinit get_core_online(unsigned int cpu)
 	 * sensors. We check this bit only, all the early CPUs
 	 * without thermal sensors will be filtered out.
 	 */
-	if (!cpu_has(c, X86_FEATURE_DTS))
+	if (!cpu_has(c, X86_FEATURE_DTHERM))
 		return;
 
 	if (!pdev) {
@@ -701,8 +701,14 @@ static void __cpuinit put_core_offline(unsigned int cpu)
 		return;
 
 	pdata = platform_get_drvdata(pdev);
+	if (!pdata)
+		return;
 
 	indx = TO_ATTR_NO(cpu);
+
+	/* The core id is too big, just return */
+	if (indx > MAX_CORE_DATA - 1)
+		return;
 
 	if (pdata->core_data[indx] && pdata->core_data[indx]->cpu == cpu)
 		coretemp_remove_core(pdata, &pdev->dev, indx);

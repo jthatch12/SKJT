@@ -3483,6 +3483,149 @@ static void __devinit rtl_init_jumbo_ops(struct rtl8169_private *tp)
 	}
 }
 
+static void rtl_hw_jumbo_enable(struct rtl8169_private *tp)
+{
+	rtl_generic_op(tp, tp->jumbo_ops.enable);
+}
+
+static void rtl_hw_jumbo_disable(struct rtl8169_private *tp)
+{
+	rtl_generic_op(tp, tp->jumbo_ops.disable);
+}
+
+static void r8168c_hw_jumbo_enable(struct rtl8169_private *tp)
+{
+	void __iomem *ioaddr = tp->mmio_addr;
+
+	RTL_W8(Config3, RTL_R8(Config3) | Jumbo_En0);
+	RTL_W8(Config4, RTL_R8(Config4) | Jumbo_En1);
+	rtl_tx_performance_tweak(tp->pci_dev, 0x2 << MAX_READ_REQUEST_SHIFT);
+}
+
+static void r8168c_hw_jumbo_disable(struct rtl8169_private *tp)
+{
+	void __iomem *ioaddr = tp->mmio_addr;
+
+	RTL_W8(Config3, RTL_R8(Config3) & ~Jumbo_En0);
+	RTL_W8(Config4, RTL_R8(Config4) & ~Jumbo_En1);
+	rtl_tx_performance_tweak(tp->pci_dev, 0x5 << MAX_READ_REQUEST_SHIFT);
+}
+
+static void r8168dp_hw_jumbo_enable(struct rtl8169_private *tp)
+{
+	void __iomem *ioaddr = tp->mmio_addr;
+
+	RTL_W8(Config3, RTL_R8(Config3) | Jumbo_En0);
+}
+
+static void r8168dp_hw_jumbo_disable(struct rtl8169_private *tp)
+{
+	void __iomem *ioaddr = tp->mmio_addr;
+
+	RTL_W8(Config3, RTL_R8(Config3) & ~Jumbo_En0);
+}
+
+static void r8168e_hw_jumbo_enable(struct rtl8169_private *tp)
+{
+	void __iomem *ioaddr = tp->mmio_addr;
+	struct pci_dev *pdev = tp->pci_dev;
+
+	RTL_W8(MaxTxPacketSize, 0x3f);
+	RTL_W8(Config3, RTL_R8(Config3) | Jumbo_En0);
+	RTL_W8(Config4, RTL_R8(Config4) | 0x01);
+	pci_write_config_byte(pdev, 0x79, 0x20);
+}
+
+static void r8168e_hw_jumbo_disable(struct rtl8169_private *tp)
+{
+	void __iomem *ioaddr = tp->mmio_addr;
+	struct pci_dev *pdev = tp->pci_dev;
+
+	RTL_W8(MaxTxPacketSize, 0x0c);
+	RTL_W8(Config3, RTL_R8(Config3) & ~Jumbo_En0);
+	RTL_W8(Config4, RTL_R8(Config4) & ~0x01);
+	pci_write_config_byte(pdev, 0x79, 0x50);
+}
+
+static void r8168b_0_hw_jumbo_enable(struct rtl8169_private *tp)
+{
+	rtl_tx_performance_tweak(tp->pci_dev,
+		(0x2 << MAX_READ_REQUEST_SHIFT) | PCI_EXP_DEVCTL_NOSNOOP_EN);
+}
+
+static void r8168b_0_hw_jumbo_disable(struct rtl8169_private *tp)
+{
+	rtl_tx_performance_tweak(tp->pci_dev,
+		(0x5 << MAX_READ_REQUEST_SHIFT) | PCI_EXP_DEVCTL_NOSNOOP_EN);
+}
+
+static void r8168b_1_hw_jumbo_enable(struct rtl8169_private *tp)
+{
+	void __iomem *ioaddr = tp->mmio_addr;
+
+	r8168b_0_hw_jumbo_enable(tp);
+
+	RTL_W8(Config4, RTL_R8(Config4) | (1 << 0));
+}
+
+static void r8168b_1_hw_jumbo_disable(struct rtl8169_private *tp)
+{
+	void __iomem *ioaddr = tp->mmio_addr;
+
+	r8168b_0_hw_jumbo_disable(tp);
+
+	RTL_W8(Config4, RTL_R8(Config4) & ~(1 << 0));
+}
+
+static void __devinit rtl_init_jumbo_ops(struct rtl8169_private *tp)
+{
+	struct jumbo_ops *ops = &tp->jumbo_ops;
+
+	switch (tp->mac_version) {
+	case RTL_GIGA_MAC_VER_11:
+		ops->disable	= r8168b_0_hw_jumbo_disable;
+		ops->enable	= r8168b_0_hw_jumbo_enable;
+		break;
+	case RTL_GIGA_MAC_VER_12:
+	case RTL_GIGA_MAC_VER_17:
+		ops->disable	= r8168b_1_hw_jumbo_disable;
+		ops->enable	= r8168b_1_hw_jumbo_enable;
+		break;
+	case RTL_GIGA_MAC_VER_18: /* Wild guess. Needs info from Realtek. */
+	case RTL_GIGA_MAC_VER_19:
+	case RTL_GIGA_MAC_VER_20:
+	case RTL_GIGA_MAC_VER_21: /* Wild guess. Needs info from Realtek. */
+	case RTL_GIGA_MAC_VER_22:
+	case RTL_GIGA_MAC_VER_23:
+	case RTL_GIGA_MAC_VER_24:
+	case RTL_GIGA_MAC_VER_25:
+	case RTL_GIGA_MAC_VER_26:
+		ops->disable	= r8168c_hw_jumbo_disable;
+		ops->enable	= r8168c_hw_jumbo_enable;
+		break;
+	case RTL_GIGA_MAC_VER_27:
+	case RTL_GIGA_MAC_VER_28:
+		ops->disable	= r8168dp_hw_jumbo_disable;
+		ops->enable	= r8168dp_hw_jumbo_enable;
+		break;
+	case RTL_GIGA_MAC_VER_31: /* Wild guess. Needs info from Realtek. */
+	case RTL_GIGA_MAC_VER_32:
+	case RTL_GIGA_MAC_VER_33:
+		ops->disable	= r8168e_hw_jumbo_disable;
+		ops->enable	= r8168e_hw_jumbo_enable;
+		break;
+
+	/*
+	 * No action needed for jumbo frames with 8169.
+	 * No jumbo for 810x at all.
+	 */
+	default:
+		ops->disable	= NULL;
+		ops->enable	= NULL;
+		break;
+	}
+}
+
 static void rtl_hw_reset(struct rtl8169_private *tp)
 {
 	void __iomem *ioaddr = tp->mmio_addr;
@@ -5227,13 +5370,6 @@ static int rtl8169_rx_interrupt(struct net_device *dev,
 
 			dev->stats.rx_bytes += pkt_size;
 			dev->stats.rx_packets++;
-		}
-
-		/* Work around for AMD plateform. */
-		if ((desc->opts2 & cpu_to_le32(0xfffe000)) &&
-		    (tp->mac_version == RTL_GIGA_MAC_VER_05)) {
-			desc->opts2 = 0;
-			cur_rx++;
 		}
 	}
 

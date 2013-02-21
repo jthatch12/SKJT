@@ -38,6 +38,7 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/slab.h>
+#include <linux/sched.h>
 
 #include "rt2x00.h"
 #include "rt2800lib.h"

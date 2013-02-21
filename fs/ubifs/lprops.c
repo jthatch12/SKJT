@@ -373,6 +373,9 @@ void ubifs_replace_cat(struct ubifs_info *c, struct ubifs_lprops *old_lprops,
 	default:
 		ubifs_assert(0);
 	}
+
+	c->in_a_category_cnt -= 1;
+	ubifs_assert(c->in_a_category_cnt >= 0);
 }
 
 /**

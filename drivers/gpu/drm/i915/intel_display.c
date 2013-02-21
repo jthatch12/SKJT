@@ -5969,7 +5969,7 @@ void intel_crtc_load_lut(struct drm_crtc *crtc)
 	int i;
 
 	/* The clocks have to be on to load the palette. */
-	if (!crtc->enabled)
+	if (!crtc->enabled || !intel_crtc->active)
 		return;
 
 	/* use legacy palette for Ironlake */
@@ -7281,6 +7281,13 @@ static void intel_sanitize_modesetting(struct drm_device *dev,
 {
 	struct drm_i915_private *dev_priv = dev->dev_private;
 	u32 reg, val;
+	int i;
+
+	/* Clear any frame start delays used for debugging left by the BIOS */
+	for_each_pipe(i) {
+		reg = PIPECONF(i);
+		I915_WRITE(reg, I915_READ(reg) & ~PIPECONF_FRAME_START_DELAY_MASK);
+	}
 
 	if (HAS_PCH_SPLIT(dev))
 		return;
@@ -8372,6 +8379,8 @@ static void ironlake_teardown_rc6(struct drm_device *dev)
 		drm_gem_object_unreference(&dev_priv->pwrctx->base);
 		dev_priv->pwrctx = NULL;
 	}
+
+	gen7_setup_fixed_func_scheduler(dev_priv);
 }
 
 static void ironlake_disable_rc6(struct drm_device *dev)

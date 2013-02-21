@@ -4065,6 +4065,34 @@ lpfc_sli_sriov_nr_virtfn_get(struct lpfc_hba *phba)
 }
 
 /**
+ * lpfc_sli_sriov_nr_virtfn_get - Get the number of sr-iov virtual functions
+ * @phba: pointer to lpfc hba data structure.
+ *
+ * This function enables the PCI SR-IOV virtual functions to a physical
+ * function. It invokes the PCI SR-IOV api with the @nr_vfn provided to
+ * enable the number of virtual functions to the physical function. As
+ * not all devices support SR-IOV, the return code from the pci_enable_sriov()
+ * API call does not considered as an error condition for most of the device.
+ **/
+uint16_t
+lpfc_sli_sriov_nr_virtfn_get(struct lpfc_hba *phba)
+{
+	struct pci_dev *pdev = phba->pcidev;
+	uint16_t nr_virtfn;
+	int pos;
+
+	if (!pdev->is_physfn)
+		return 0;
+
+	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_SRIOV);
+	if (pos == 0)
+		return 0;
+
+	pci_read_config_word(pdev, pos + PCI_SRIOV_TOTAL_VF, &nr_virtfn);
+	return nr_virtfn;
+}
+
+/**
  * lpfc_sli_probe_sriov_nr_virtfn - Enable a number of sr-iov virtual functions
  * @phba: pointer to lpfc hba data structure.
  * @nr_vfn: number of virtual functions to be enabled.

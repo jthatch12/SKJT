@@ -661,17 +661,15 @@ static void unicast_arp_send(struct sk_buff *skb, struct net_device *dev,
 
 	spin_lock_irqsave(&priv->lock, flags);
 
-	path = __path_find(dev, phdr->hwaddr + 4);
+	path = __path_find(dev, cb->hwaddr + 4);
 	if (!path || !path->valid) {
 		int new_path = 0;
 
 		if (!path) {
-			path = path_rec_create(dev, phdr->hwaddr + 4);
+			path = path_rec_create(dev, cb->hwaddr + 4);
 			new_path = 1;
 		}
 		if (path) {
-			/* put pseudoheader back on for next time */
-			skb_push(skb, sizeof *phdr);
 			__skb_queue_tail(&path->queue, skb);
 
 			if (!path->query && path_rec_start(dev, path)) {
@@ -695,12 +693,10 @@ static void unicast_arp_send(struct sk_buff *skb, struct net_device *dev,
 			  be16_to_cpu(path->pathrec.dlid));
 
 		spin_unlock_irqrestore(&priv->lock, flags);
-		ipoib_send(dev, skb, path->ah, IPOIB_QPN(phdr->hwaddr));
+		ipoib_send(dev, skb, path->ah, IPOIB_QPN(cb->hwaddr));
 		return;
 	} else if ((path->query || !path_rec_start(dev, path)) &&
 		   skb_queue_len(&path->queue) < IPOIB_MAX_PATH_REC_QUEUE) {
-		/* put pseudoheader back on for next time */
-		skb_push(skb, sizeof *phdr);
 		__skb_queue_tail(&path->queue, skb);
 	} else {
 		++dev->stats.tx_dropped;
@@ -774,16 +770,14 @@ static int ipoib_start_xmit(struct sk_buff *skb, struct net_device *dev)
 			dev_kfree_skb_any(skb);
 		}
 	} else {
-		struct ipoib_pseudoheader *phdr =
-			(struct ipoib_pseudoheader *) skb->data;
-		skb_pull(skb, sizeof *phdr);
+		struct ipoib_cb *cb = (struct ipoib_cb *) skb->cb;
 
-		if (phdr->hwaddr[4] == 0xff) {
+		if (cb->hwaddr[4] == 0xff) {
 			/* Add in the P_Key for multicast*/
-			phdr->hwaddr[8] = (priv->pkey >> 8) & 0xff;
-			phdr->hwaddr[9] = priv->pkey & 0xff;
+			cb->hwaddr[8] = (priv->pkey >> 8) & 0xff;
+			cb->hwaddr[9] = priv->pkey & 0xff;
 
-			ipoib_mcast_send(dev, phdr->hwaddr + 4, skb);
+			ipoib_mcast_send(dev, cb->hwaddr + 4, skb);
 		} else {
 			/* unicast GID -- should be ARP or RARP reply */
 
@@ -1021,11 +1015,7 @@ static void ipoib_setup(struct net_device *dev)
 
 	dev->flags		|= IFF_BROADCAST | IFF_MULTICAST;
 
-	/*
-	 * We add in INFINIBAND_ALEN to allow for the destination
-	 * address "pseudoheader" for skbs without neighbour struct.
-	 */
-	dev->hard_header_len	 = IPOIB_ENCAP_LEN + INFINIBAND_ALEN;
+	dev->hard_header_len	 = IPOIB_ENCAP_LEN;
 	dev->addr_len		 = INFINIBAND_ALEN;
 	dev->type		 = ARPHRD_INFINIBAND;
 	dev->tx_queue_len	 = ipoib_sendq_size * 2;

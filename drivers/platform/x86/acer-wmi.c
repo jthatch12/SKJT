@@ -571,6 +571,12 @@ struct wmi_interface *iface)
 				return AE_ERROR;
 			*value = result & 0x1;
 			return AE_OK;
+		case 3:
+			err = ec_read(0x78, &result);
+			if (err)
+				return AE_ERROR;
+			*value = result & 0x1;
+			return AE_OK;
 		default:
 			err = ec_read(0xA, &result);
 			if (err)
