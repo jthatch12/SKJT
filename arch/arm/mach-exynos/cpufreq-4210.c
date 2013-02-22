@@ -43,7 +43,7 @@ static unsigned int exynos4210_volt_table[CPUFREQ_LEVEL_END];
 static struct cpufreq_frequency_table exynos4210_freq_table[] = {
 
 	{L0, 1400 * 1000},
-	{L1, 1400 * 1000},
+	{L1, 1300 * 1000},
 	{L2, 1200 * 1000},
 	{L3, 1100 * 1000},
 	{L4, 1000 * 1000},
