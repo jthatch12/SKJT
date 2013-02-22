@@ -327,9 +327,6 @@ static void __init set_volt_table(void)
 		for_1200 = true;
 		max_support_idx = L2; /* allow max freq any way */
 #else
-		for_1300 = true;
-		max_support_idx = L1; /* allow max freq any way */
-#else
 		for_1400 = true;
 		max_support_idx = L0; /* allow max freq any way */
 #endif
