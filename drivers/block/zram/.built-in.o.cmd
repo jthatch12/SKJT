@@ -1,0 +1,1 @@
+cmd_drivers/block/zram/built-in.o :=  /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL    -r -o drivers/block/zram/built-in.o drivers/block/zram/zram.o drivers/block/zram/xvmalloc.o 

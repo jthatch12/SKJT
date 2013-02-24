@@ -1,0 +1,1 @@
+cmd_drivers/block/snappy/built-in.o :=  /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL    -r -o drivers/block/snappy/built-in.o drivers/block/snappy/csnappy_compress.o drivers/block/snappy/csnappy_decompress.o 

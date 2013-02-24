@@ -1,0 +1,1 @@
+cmd_drivers/usb/serial/ftdi_sio.ko := /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL -r  -T /home/thatch/android/kernel/Siyah/scripts/module-common.lds --build-id -T /home/thatch/android/kernel/Siyah/scripts/module-common.lds -o drivers/usb/serial/ftdi_sio.ko drivers/usb/serial/ftdi_sio.o drivers/usb/serial/ftdi_sio.mod.o
