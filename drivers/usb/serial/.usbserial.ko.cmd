@@ -1,1 +1,0 @@
-cmd_drivers/usb/serial/usbserial.ko := /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL -r  -T /home/thatch/android/kernel/Siyah/scripts/module-common.lds --build-id -T /home/thatch/android/kernel/Siyah/scripts/module-common.lds -o drivers/usb/serial/usbserial.ko drivers/usb/serial/usbserial.o drivers/usb/serial/usbserial.mod.o

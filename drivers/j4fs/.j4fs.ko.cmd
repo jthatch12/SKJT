@@ -1,1 +1,0 @@
-cmd_drivers/j4fs/j4fs.ko := /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL -r  -T /home/thatch/android/kernel/Siyah/scripts/module-common.lds --build-id -T /home/thatch/android/kernel/Siyah/scripts/module-common.lds -o drivers/j4fs/j4fs.ko drivers/j4fs/j4fs.o drivers/j4fs/j4fs.mod.o

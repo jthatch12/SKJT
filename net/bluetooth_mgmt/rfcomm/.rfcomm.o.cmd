@@ -1,1 +1,0 @@
-cmd_net/bluetooth_mgmt/rfcomm/rfcomm.o := /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL    -r -o net/bluetooth_mgmt/rfcomm/rfcomm.o net/bluetooth_mgmt/rfcomm/core.o net/bluetooth_mgmt/rfcomm/sock.o net/bluetooth_mgmt/rfcomm/tty.o 

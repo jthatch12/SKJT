@@ -1,1 +1,0 @@
-cmd_drivers/mfd/built-in.o :=  /home/thatch/android/kernel/Siyah/android-toolchain/bin/arm-eabi-ld -EL    -r -o drivers/mfd/built-in.o drivers/mfd/mfd-core.o drivers/mfd/max8997.o drivers/mfd/max8997-irq.o 
