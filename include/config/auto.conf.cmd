@@ -353,8 +353,6 @@ deps_config := \
 	drivers/media/video/samsung/jpeg/Kconfig \
 	drivers/media/video/samsung/fimg2d3x-exynos4/Kconfig \
 	drivers/media/video/samsung/mali_r3p0_lsi/Kconfig \
-	drivers/media/video/samsung/mali/Kconfig \
-	drivers/media/video/samsung/ump/Kconfig \
 	drivers/media/video/samsung/mfc5x/Kconfig \
 	drivers/media/video/samsung/tvout/Kconfig \
 	drivers/media/video/samsung/fimc/Kconfig \

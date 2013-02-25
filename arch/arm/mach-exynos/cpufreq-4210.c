@@ -103,7 +103,7 @@ static unsigned int clkdiv_cpu1[CPUFREQ_LEVEL_END][2] = {
 	 * { DIVCOPY, DIVHPM }
 	 */
 	{ 5, 0 },	/* ARM L0: 1400MHz */
-	{ 5, 0 },   /* ARM L1: 1300MHz */
+	{ 5, 0 },       /* ARM L1: 1300MHz */
 	{ 5, 0 },	/* ARM L2: 1200MHz */
 	{ 4, 0 },	/* ARM L3: 1100MHz */
 	{ 4, 0 },	/* ARM L4: 1000MHz */

@@ -1282,9 +1282,6 @@
 #define __enabled_CONFIG_SND_PXA2XX_SOC_E740_MODULE 0
 #define __enabled_CONFIG_ASYNC_MEMCPY 0
 #define __enabled_CONFIG_ASYNC_MEMCPY_MODULE 0
-#define __enabled_CONFIG_VIDEO_MALI400MP 1
-#define __enabled_CONFIG_VIDEO_MALI400MP_MODULE 0
-#define CONFIG_VIDEO_MALI400MP 1
 #define __enabled_CONFIG_SENSORS_BH1721 0
 #define __enabled_CONFIG_SENSORS_BH1721_MODULE 0
 #define __enabled_CONFIG_RTC_DRV_MAX8998 0
@@ -2234,6 +2231,9 @@
 #define __enabled_CONFIG_FIREWIRE_SBP2_MODULE 0
 #define __enabled_CONFIG_MX3_IPU 0
 #define __enabled_CONFIG_MX3_IPU_MODULE 0
+#define __enabled_CONFIG_MALI_UMP_R2P4_LSI 1
+#define __enabled_CONFIG_MALI_UMP_R2P4_LSI_MODULE 0
+#define CONFIG_MALI_UMP_R2P4_LSI 1
 #define __enabled_CONFIG_MFD_MAX77693 0
 #define __enabled_CONFIG_MFD_MAX77693_MODULE 0
 #define __enabled_CONFIG_VIDEO_S5K4E5 0
@@ -2661,6 +2661,8 @@
 #define __enabled_CONFIG_MISDN_MODULE 0
 #define __enabled_CONFIG_EXPORTFS 0
 #define __enabled_CONFIG_EXPORTFS_MODULE 0
+#define __enabled_CONFIG_VIDEO_MALI400MP_UMP_DEBUG 0
+#define __enabled_CONFIG_VIDEO_MALI400MP_UMP_DEBUG_MODULE 0
 #define __enabled_CONFIG_PCMCIA_IBMTR 0
 #define __enabled_CONFIG_PCMCIA_IBMTR_MODULE 0
 #define __enabled_CONFIG_CPU_FREQ_S3C64XX 0
@@ -3703,6 +3705,8 @@
 #define __enabled_CONFIG_TDMB_T3300_MODULE 0
 #define __enabled_CONFIG_TCP_CONG_YEAH 0
 #define __enabled_CONFIG_TCP_CONG_YEAH_MODULE 0
+#define __enabled_CONFIG_MALI_UMP_R3P1_LSI 0
+#define __enabled_CONFIG_MALI_UMP_R3P1_LSI_MODULE 0
 #define __enabled_CONFIG_IEEE802154 0
 #define __enabled_CONFIG_IEEE802154_MODULE 0
 #define __enabled_CONFIG_XO15_EBOOK 0
@@ -9161,8 +9165,6 @@
 #define __enabled_CONFIG_TOUCHSCREEN_TSC2007_MODULE 0
 #define __enabled_CONFIG_USB_RENESAS_USBHS 0
 #define __enabled_CONFIG_USB_RENESAS_USBHS_MODULE 0
-#define __enabled_CONFIG_UMP_R3P1_LSI 0
-#define __enabled_CONFIG_UMP_R3P1_LSI_MODULE 0
 #define __enabled_CONFIG_TN3215 0
 #define __enabled_CONFIG_TN3215_MODULE 0
 #define __enabled_CONFIG_SND_RME96 0
@@ -11177,8 +11179,6 @@
 #define __enabled_CONFIG_SND_SOC_WM8961_MODULE 0
 #define __enabled_CONFIG_FB_MATROX_I2C 0
 #define __enabled_CONFIG_FB_MATROX_I2C_MODULE 0
-#define __enabled_CONFIG_MALI_R3P1_LSI 0
-#define __enabled_CONFIG_MALI_R3P1_LSI_MODULE 0
 #define __enabled_CONFIG_ANDROID_WIP 0
 #define __enabled_CONFIG_ANDROID_WIP_MODULE 0
 #define __enabled_CONFIG_SND_SUN_DBRI 0
@@ -12781,7 +12781,7 @@
 #define __enabled_CONFIG_PARPORT_GSC_MODULE 0
 #define __enabled_CONFIG_CSB726_CSB701 0
 #define __enabled_CONFIG_CSB726_CSB701_MODULE 0
-#define CONFIG_LOCALVERSION "STi-2.21-JT"
+#define CONFIG_LOCALVERSION "STi-2.22UV-JT"
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING 0
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING_MODULE 0
 #define __enabled_CONFIG_VIDEO_DAVINCI_VPIF 0
@@ -13475,6 +13475,9 @@
 #define __enabled_CONFIG_FB_Q40_MODULE 0
 #define __enabled_CONFIG_BROADCOM_PHY 0
 #define __enabled_CONFIG_BROADCOM_PHY_MODULE 0
+#define __enabled_CONFIG_VIDEO_MALI400MP_UMP 1
+#define __enabled_CONFIG_VIDEO_MALI400MP_UMP_MODULE 0
+#define CONFIG_VIDEO_MALI400MP_UMP 1
 #define __enabled_CONFIG_MAX1363_RING_BUFFER 0
 #define __enabled_CONFIG_MAX1363_RING_BUFFER_MODULE 0
 #define __enabled_CONFIG_SH_LCD_MIPI_DSI 0
@@ -16745,9 +16748,6 @@
 #define __enabled_CONFIG_ISDN_DRV_ICN_MODULE 0
 #define __enabled_CONFIG_USB_GADGET_DUMMY_HCD 0
 #define __enabled_CONFIG_USB_GADGET_DUMMY_HCD_MODULE 0
-#define __enabled_CONFIG_VIDEO_UMP 1
-#define __enabled_CONFIG_VIDEO_UMP_MODULE 0
-#define CONFIG_VIDEO_UMP 1
 #define __enabled_CONFIG_OF_MDIO 0
 #define __enabled_CONFIG_OF_MDIO_MODULE 0
 #define __enabled_CONFIG_CAN_SOFTING_CS 0
@@ -17324,8 +17324,6 @@
 #define __enabled_CONFIG_W1_SLAVE_THERM_MODULE 0
 #define __enabled_CONFIG_CAN_SLCAN 0
 #define __enabled_CONFIG_CAN_SLCAN_MODULE 0
-#define __enabled_CONFIG_VIDEO_MALI400MP_DEBUG 0
-#define __enabled_CONFIG_VIDEO_MALI400MP_DEBUG_MODULE 0
 #define __enabled_CONFIG_FB_S5P_LD9040 1
 #define __enabled_CONFIG_FB_S5P_LD9040_MODULE 0
 #define CONFIG_FB_S5P_LD9040 1
@@ -18896,8 +18894,6 @@
 #define __enabled_CONFIG_REGULATOR_MAX8649_MODULE 0
 #define __enabled_CONFIG_SND_SOC_88PM860X 0
 #define __enabled_CONFIG_SND_SOC_88PM860X_MODULE 0
-#define __enabled_CONFIG_VIDEO_UMP_DEBUG 0
-#define __enabled_CONFIG_VIDEO_UMP_DEBUG_MODULE 0
 #define __enabled_CONFIG_MEDIA_TUNER_TEA5761 0
 #define __enabled_CONFIG_MEDIA_TUNER_TEA5761_MODULE 0
 #define __enabled_CONFIG_S6GMAC 0

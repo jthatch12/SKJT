@@ -29,8 +29,8 @@
 #endif
 
 #define CUSTOMVOLTAGE_VERSION 1
-#define CPU_UV_MV_MAX 1600000
-#define CPU_UV_MV_MIN 600000
+#define CPU_UV_MV_MAX 1400000
+#define CPU_UV_MV_MIN 800000
 
 #ifdef MODULE
 static int (*gm_misc_register)(struct miscdevice * misc);
@@ -332,7 +332,7 @@ static ssize_t customvoltage_intvolt_write(struct device * dev, struct device_at
 	int i = 0, j = 0, next_freq = 0;
 	unsigned long voltage;
 
-	char buffer[15];/* freq steps from L0 to L13 end freq*/
+	char buffer[14]; /* freq steps from L0 to 13 0 end freq*/
 
 	while (1) {
 		buffer[j] = buf[i];
@@ -494,3 +494,4 @@ module_exit( customvoltage_exit );
 MODULE_AUTHOR("Gokhan Moral <gm@alumni.bilkent.edu.tr>");
 MODULE_DESCRIPTION("CPU Undervolting interfaces (3-in-1) module");
 MODULE_LICENSE("GPL");
+
