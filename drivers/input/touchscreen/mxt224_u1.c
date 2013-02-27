@@ -98,12 +98,15 @@
 #define MAX_USING_FINGER_NUM 10
 
 #define MXT224_AUTOCAL_WAIT_TIME		2000
+// no debug !!!
 #define printk(arg, ...)
 #define TOUCH_LOCK_FREQ			500000
 
 #if defined(U1_EUR_TARGET)
 static bool gbfilter;
 #endif
+
+static unsigned int level = ~0;
 
 struct object_t {
 	u8 object_type;
@@ -249,8 +252,9 @@ static spinlock_t gestures_lock;
 
 static u8 mov_hysti = 255;
 unsigned int lock_freq = TOUCH_LOCK_FREQ;
+int lock_dyn = 0;
 
-#undef CLEAR_MEDIAN_FILTER_ERROR
+#define CLEAR_MEDIAN_FILTER_ERROR
 struct mxt224_data *copy_data;
 int touch_is_pressed;
 EXPORT_SYMBOL(touch_is_pressed);
@@ -1341,13 +1345,13 @@ static unsigned int flash_timeout = 0;
 static void report_input_data(struct mxt224_data *data)
 {
 	int i;
-	static unsigned int level = ~0;
 	bool tsp_state = false;
 	bool check_press = false;
+	int64_t nr_running_tmp = 0;
+	unsigned int new_lock_freq = 0;
 	u16 object_address = 0;
 	u16 size = 1;
 	u8 value;
-	unsigned long avnrun[3];
 #ifdef CONFIG_TOUCHSCREEN_GESTURES
 	int gesture_no, finger_no;
 	int finger_pos;
@@ -1355,7 +1359,6 @@ static void report_input_data(struct mxt224_data *data)
 	int step;
 	bool fingers_completed;
 	unsigned long flags;
-	unsigned int new_lock_freq;
 	bool track_gestures;
 
 	track_gestures = copy_data->mxt224_enabled;
@@ -1363,30 +1366,35 @@ static void report_input_data(struct mxt224_data *data)
 
 	touch_is_pressed = 0;
 
-	if (level == ~0) {
+	nr_running_tmp = nr_running();
 
-		// DEBUG
-		//printk("old lock_freq: %u\n", lock_freq);
-		new_lock_freq = lock_freq / 10 * nr_running();
-
-		for (i=100000; i <= 1200000; i=i+100000) {
-			if (i >= lock_freq) {
-				new_lock_freq = lock_freq;
-				break;
-			}
-			else if (new_lock_freq <= i ) {
-				if (i == 850000 || i == 950000 || i == 1050000 || i == 1150000) {
-					i = i + 2000;
+	if (lock_dyn == 1) {
+		if (level == ~0 && nr_running_tmp > 1) {
+			// DEBUG
+			printk("lock_freq: old -> %u\n", lock_freq);
+	
+			new_lock_freq = lock_freq / 10 * nr_running_tmp;
+	
+			for (i=100000; i <= 1000000; i=i+100000) {
+				 if (i >= lock_freq) {
+					new_lock_freq = lock_freq;
+					break;
 				}
-				new_lock_freq = i;
-				break;
+				else if (new_lock_freq <= i ) {
+					new_lock_freq = i;
+					break;
+				}
 			}
+		
+			// DEBUG
+			printk("lock_freq: new -> %u\n", new_lock_freq);
+				
+			exynos_cpufreq_get_level(new_lock_freq, &level);
 		}
-
-		// DEBUG
-		//printk("new lock_freq: %u\n", new_lock_freq);
-
-		exynos_cpufreq_get_level(new_lock_freq, &level);
+	}
+	else {
+		if (level == ~0)
+			exynos_cpufreq_get_level(lock_freq, &level);
 	}
 
 	for (i = 0; i < data->num_fingers; i++) {
@@ -2088,6 +2096,7 @@ static irqreturn_t mxt224_irq_thread(int irq, void *ptr)
 				}
 			}
 		}
+#if 0
 #ifdef CLEAR_MEDIAN_FILTER_ERROR
 		if ((msg[0] == 18) && (data->family_id == 0x81)) {
 			if ((msg[4] & 0x5) == 0x5) {
@@ -2116,6 +2125,7 @@ static irqreturn_t mxt224_irq_thread(int irq, void *ptr)
 				}
 			}
 		}
+#endif
 #endif
 		if (msg[0] > 1 && msg[0] < 12) {
 
@@ -3668,6 +3678,32 @@ static ssize_t touch_lock_freq_store(struct device *dev,
 	return size;
 }
 
+static ssize_t touch_lock_dyn_show(struct device *dev,
+				struct device_attribute *attr, char *buf)
+{
+	return sprintf(buf, "%u\n", lock_dyn);
+}
+
+static ssize_t touch_lock_dyn_store(struct device *dev,
+				struct device_attribute *attr,
+				const char *buf, size_t size)
+{
+	int ret;
+	unsigned int value;
+
+	ret = sscanf(buf, "%d\n", &value);
+
+	if (ret != 1)
+		return -EINVAL;
+	else
+		if (value > 0)
+			lock_dyn = 1;
+		else
+			lock_dyn = 0;
+
+	return size;
+}
+
 static ssize_t slide2wake_show(struct device *dev,
 				  struct device_attribute *attr, char *buf)
 {
@@ -3792,6 +3828,8 @@ static DEVICE_ATTR(tsp_touch_config, S_IRUGO | S_IWUSR | S_IWGRP,
 	touch_config_show, touch_config_store);
 static DEVICE_ATTR(tsp_touch_freq, S_IRUGO | S_IWUSR | S_IWGRP,
 	touch_lock_freq_show, touch_lock_freq_store);
+static DEVICE_ATTR(tsp_touch_dyn, S_IRUGO | S_IWUSR | S_IWGRP,
+	touch_lock_dyn_show, touch_lock_dyn_store);
 #ifdef CONFIG_KEYBOARD_CYPRESS_AOKP
 static DEVICE_ATTR(tsp_flash_timeout, S_IRUGO | S_IWUSR | S_IWGRP,
 	led_flash_timeout_show, led_flash_timeout_store);
@@ -4488,6 +4526,10 @@ static int __devinit mxt224_probe(struct i2c_client *client,
 	if (device_create_file(sec_touchscreen, &dev_attr_tsp_touch_freq) < 0)
 		printk(KERN_ERR "Failed to create device file(%s)!\n",
 			dev_attr_tsp_touch_freq.attr.name);
+
+	if (device_create_file(sec_touchscreen, &dev_attr_tsp_touch_dyn) < 0)
+		printk(KERN_ERR "Failed to create device file(%s)!\n",
+			dev_attr_tsp_touch_dyn.attr.name);
 
 #ifdef CONFIG_KEYBOARD_CYPRESS_AOKP
 	if (device_create_file(sec_touchscreen, &dev_attr_tsp_flash_timeout) < 0)
