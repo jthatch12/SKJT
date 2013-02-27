@@ -8175,7 +8175,8 @@
 #define __enabled_CONFIG_PDC_ADMA 0
 #define __enabled_CONFIG_PDC_ADMA_MODULE 0
 #define __enabled_CONFIG_M0_MODS 0
-#define __enabled_CONFIG_M0_MODS_MODULE 0
+#define __enabled_CONFIG_M0_MODS_MODULE 1
+#define CONFIG_M0_MODS_MODULE 1
 #define __enabled_CONFIG_MACH_TRIZEPS_UCONXS 0
 #define __enabled_CONFIG_MACH_TRIZEPS_UCONXS_MODULE 0
 #define __enabled_CONFIG_SND_VXPOCKET 0
@@ -12781,7 +12782,7 @@
 #define __enabled_CONFIG_PARPORT_GSC_MODULE 0
 #define __enabled_CONFIG_CSB726_CSB701 0
 #define __enabled_CONFIG_CSB726_CSB701_MODULE 0
-#define CONFIG_LOCALVERSION "STi-2.26-JT"
+#define CONFIG_LOCALVERSION "STi-2.27-JT"
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING 0
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING_MODULE 0
 #define __enabled_CONFIG_VIDEO_DAVINCI_VPIF 0
