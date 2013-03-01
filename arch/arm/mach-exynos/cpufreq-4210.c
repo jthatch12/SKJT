@@ -70,7 +70,7 @@ static struct cpufreq_clkdiv exynos4210_clkdiv_table[] = {
 	{L7,  0},
 	{L8,  0},
 	{L9,  0},
-	{L10,  0},
+	{L10, 0},
 	{L11, 0},
 	{L12, 0},
 	{L13, 0},
@@ -333,7 +333,7 @@ static void __init set_volt_table(void)
 		break;
 	case SUPPORT_1200MHZ:
 		for_1200 = true;
-		max_support_idx = L2; /* allow max freq any way */
+		max_support_idx = L0; /* allow max freq any way */
 		break;
 	case SUPPORT_1000MHZ:
 		for_1000 = true;
