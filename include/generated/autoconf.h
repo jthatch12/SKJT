@@ -1,7 +1,7 @@
 /*
  *
  * Automatically generated file; DO NOT EDIT.
- * Linux/arm 3.1.0-R66 Kernel Configuration
+ * Linux/arm 3.1.0-R68 Kernel Configuration
  *
  */
 #define __enabled_CONFIG_IP6_NF_MATCH_AH 0
@@ -12782,7 +12782,7 @@
 #define __enabled_CONFIG_PARPORT_GSC_MODULE 0
 #define __enabled_CONFIG_CSB726_CSB701 0
 #define __enabled_CONFIG_CSB726_CSB701_MODULE 0
-#define CONFIG_LOCALVERSION "STi-2.30-JT"
+#define CONFIG_LOCALVERSION "STi-2.31-JT"
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING 0
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING_MODULE 0
 #define __enabled_CONFIG_VIDEO_DAVINCI_VPIF 0

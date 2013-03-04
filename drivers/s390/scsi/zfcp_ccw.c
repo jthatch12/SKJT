@@ -223,6 +223,18 @@ static int zfcp_ccw_set_offline(struct ccw_device *cdev)
 }
 
 /**
+ * zfcp_ccw_set_offline - set_offline function of zfcp driver
+ * @cdev: pointer to belonging ccw device
+ *
+ * This function gets called by the common i/o layer and sets an adapter
+ * into state offline.
+ */
+static int zfcp_ccw_set_offline(struct ccw_device *cdev)
+{
+	return zfcp_ccw_offline_sync(cdev, 0, "ccsoff1");
+}
+
+/**
  * zfcp_ccw_notify - ccw notify function
  * @cdev: pointer to belonging ccw device
  * @event: indicates if adapter was detached or attached
