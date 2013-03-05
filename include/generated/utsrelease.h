@@ -1,1 +1,1 @@
-#define UTS_RELEASE "3.1.0-R68STi-2.31-JT"
+#define UTS_RELEASE "3.1.0-R68STi-2.31EX4-JT"
