@@ -12782,11 +12782,7 @@
 #define __enabled_CONFIG_PARPORT_GSC_MODULE 0
 #define __enabled_CONFIG_CSB726_CSB701 0
 #define __enabled_CONFIG_CSB726_CSB701_MODULE 0
-<<<<<<< HEAD
-#define CONFIG_LOCALVERSION "STi-2.31EX4-JT"
-=======
-#define CONFIG_LOCALVERSION "STi-2.30-JT"
->>>>>>> parent of 31dda8f... Merge main 3.0.68 patch
+#define CONFIG_LOCALVERSION "STi-2.32-JT"
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING 0
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING_MODULE 0
 #define __enabled_CONFIG_VIDEO_DAVINCI_VPIF 0

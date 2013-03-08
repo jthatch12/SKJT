@@ -843,7 +843,8 @@ inserted:
 			else {
 				/* The old block is released after updating
 				   the inode. */
-				error = dquot_alloc_block(inode, 1);
+				error = dquot_alloc_block(inode,
+						EXT4_C2B(EXT4_SB(sb), 1));
 				if (error)
 					goto cleanup;
 				error = ext4_journal_get_write_access(handle,
@@ -939,7 +940,7 @@ cleanup:
 	return error;
 
 cleanup_dquot:
-	dquot_free_block(inode, 1);
+	dquot_free_block(inode, EXT4_C2B(EXT4_SB(sb), 1));
 	goto cleanup;
 
 bad_block:
