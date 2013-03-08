@@ -356,9 +356,6 @@ store_threshold_limit(struct threshold_block *b, const char *buf, size_t size)
 	struct thresh_restart tr;
 	unsigned long new;
 
-	if (!b->interrupt_capable)
-		return -EINVAL;
-
 	if (strict_strtoul(buf, 0, &new) < 0)
 		return -EINVAL;
 

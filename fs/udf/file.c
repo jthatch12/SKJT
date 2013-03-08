@@ -119,25 +119,6 @@ static int udf_adinicb_write_begin(struct file *file,
 	return 0;
 }
 
-static int udf_adinicb_write_begin(struct file *file,
-			struct address_space *mapping, loff_t pos,
-			unsigned len, unsigned flags, struct page **pagep,
-			void **fsdata)
-{
-	struct page *page;
-
-	if (WARN_ON_ONCE(pos >= PAGE_CACHE_SIZE))
-		return -EIO;
-	page = grab_cache_page_write_begin(mapping, 0, flags);
-	if (!page)
-		return -ENOMEM;
-	*pagep = page;
-
-	if (!PageUptodate(page) && len != PAGE_CACHE_SIZE)
-		__udf_adinicb_readpage(page);
-	return 0;
-}
-
 static int udf_adinicb_write_end(struct file *file,
 			struct address_space *mapping,
 			loff_t pos, unsigned len, unsigned copied,

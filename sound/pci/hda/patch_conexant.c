@@ -3278,12 +3278,6 @@ static int patch_cxt5066(struct hda_codec *codec)
 	if (spec->beep_amp)
 		snd_hda_attach_beep_device(codec, spec->beep_amp);
 
-	conexant_init_jacks(codec);
-	if (spec->auto_mic & AUTO_MIC_PORTB)
-		cxt5051_init_mic_jack(codec, 0x17);
-	if (spec->auto_mic & AUTO_MIC_PORTC)
-		cxt5051_init_mic_jack(codec, 0x18);
-
 	return 0;
 }
 

@@ -1022,7 +1022,6 @@ store_fan_min(struct device *dev, struct device_attribute *attr,
 {
 	struct w83627ehf_data *data = dev_get_drvdata(dev);
 	struct sensor_device_attribute *sensor_attr = to_sensor_dev_attr(attr);
-	struct w83627ehf_sio_data *sio_data = dev->platform_data;
 	int nr = sensor_attr->index;
 	unsigned long val;
 	int err;

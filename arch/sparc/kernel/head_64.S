@@ -416,22 +416,6 @@ sun4v_chip_type:
 90:	ldub	[%g7], %g2
 	ldub	[%g1], %g4
 	cmp	%g2, %g4
-	bne,pn	%icc, 89f
-	 add	%g7, 1, %g7
-	subcc	%g3, 1, %g3
-	bne,pt	%xcc, 90b
-	 add	%g1, 1, %g1
-	ba,pt	%xcc, 91f
-	 nop
-
-89:	sethi	%hi(prom_cpu_compatible), %g1
-	or	%g1, %lo(prom_cpu_compatible), %g1
-	sethi	%hi(prom_sparc_prefix), %g7
-	or	%g7, %lo(prom_sparc_prefix), %g7
-	mov	7, %g3
-90:	ldub	[%g7], %g2
-	ldub	[%g1], %g4
-	cmp	%g2, %g4
 	bne,pn	%icc, 4f
 	 add	%g7, 1, %g7
 	subcc	%g3, 1, %g3

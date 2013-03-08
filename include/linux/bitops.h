@@ -49,8 +49,6 @@ static inline unsigned long hweight_long(unsigned long w)
 	return sizeof(w) == 4 ? hweight32(w) : hweight64(w);
 }
 
-
-
 /**
  * rol64 - rotate a 64-bit value left
  * @word: value to rotate
