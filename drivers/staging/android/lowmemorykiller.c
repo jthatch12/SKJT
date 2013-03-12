@@ -178,6 +178,22 @@ void tune_lmk_param(int *other_free, int *other_file, struct shrink_control *sc)
 
 static DEFINE_MUTEX(scan_mutex);
 
+static int test_task_flag(struct task_struct *p, int flag)
+{
+	struct task_struct *t = p;
+
+	do {
+		task_lock(t);
+		if (test_tsk_thread_flag(t, flag)) {
+			task_unlock(t);
+			return 1;
+		}
+		task_unlock(t);
+	} while_each_thread(p, t);
+
+	return 0;
+}
+
 static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 {
 	struct task_struct *tsk;
@@ -278,7 +294,7 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 			continue;
 
 		if (test_tsk_thread_flag(p, TIF_MEMDIE) &&
-		    time_before_eq(jiffies, lowmem_deathpending_timeout)) {
+				ktime_us_delta(ktime_get(),lowmem_deathpending_timeout) < 0) {
 			task_unlock(p);
 			rcu_read_unlock();
 			/* give the system time to free up the memory */
