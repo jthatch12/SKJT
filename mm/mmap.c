@@ -2166,15 +2166,6 @@ int expand_downwards(struct vm_area_struct *vma,
 #ifdef CONFIG_STACK_GROWSUP
 int expand_stack(struct vm_area_struct *vma, unsigned long address)
 {
-struct vm_area_struct *next;
-
-        address &= PAGE_MASK;
-        next = vma->vm_next;
-        if (next && next->vm_start == address + PAGE_SIZE) {
-                if (!(next->vm_flags & VM_GROWSUP))
-                        return -ENOMEM;
-        }
-
 	return expand_upwards(vma, address);
 }
 
@@ -2197,17 +2188,6 @@ find_extend_vma(struct mm_struct *mm, unsigned long addr)
 #else
 int expand_stack(struct vm_area_struct *vma, unsigned long address)
 {
-
-
-
- struct vm_area_struct *prev;
-
-        address &= PAGE_MASK;
-        prev = vma->vm_prev;
-        if (prev && prev->vm_end == address) {
-                if (!(prev->vm_flags & VM_GROWSDOWN))
-                        return -ENOMEM;
-        }
 	return expand_downwards(vma, address);
 }
 

@@ -857,10 +857,7 @@ void __init swap_setup(void)
 	unsigned long megs = totalram_pages >> (20 - PAGE_SHIFT);
 
 #ifdef CONFIG_SWAP
-
-        bdi_init(swapper_space.backing_dev_info);
-
-	
+	bdi_init(swapper_space.backing_dev_info);
 #endif
 
 	/* Use a smaller cluster for small-memory machines */

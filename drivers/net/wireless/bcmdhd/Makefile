@@ -51,7 +51,7 @@ endif
 
 # For p2p connection issue
 DHDCFLAGS += -DWL_CFG80211_GON_COLLISION
-DHDCFLAGS += -DWL_CFG80211_SYNC_GON_TIME
+DHDCFLAGS += -DWL_SCB_TIMEOUT=10
 #end p2p connection
 
 # For Passing all multicast packets to host when not in suspend mode.
@@ -67,6 +67,7 @@ DHDCFLAGS +=-DINITIAL_2G_SCAN_BY_ESCAN
 
 # For Scan result patch
 DHDCFLAGS += -DESCAN_RESULT_PATCH
+DHDCFLAGS += -DDUAL_ESCAN_RESULT_BUFFER
 
 ifeq ($(CONFIG_MACH_SAMSUNG_T1),y)
 DHDCFLAGS += -DUSE_CID_CHECK -DWRITE_MACADDR
@@ -77,12 +78,17 @@ DHDCFLAGS += -DROAM_ENABLE -DROAM_CHANNEL_CACHE -DROAM_API
 # For Static Buffer
 ifeq ($(CONFIG_BROADCOM_WIFI_RESERVED_MEM),y)
 DHDCFLAGS += -DCONFIG_DHD_USE_STATIC_BUF
+DHDCFLAGS += -DENHANCED_STATIC_BUF
+DHDCFLAGS += -DSTATIC_WL_PRIV_STRUCT
 endif
 
 # For CCX
 ifneq ($(CONFIG_TARGET_LOCALE_KOR),y)
 DHDCFLAGS += -DBCMCCX
 endif
+
+# WiFi turn off delay
+DHDCFLAGS += -DWIFI_TURNOFF_DELAY=100
 
 # For SLP feature
 ifeq ($(CONFIG_SLP),y)
@@ -97,6 +103,26 @@ endif
 # For ICS SEC Features
 ifneq ($(findstring GlobalConfig, $(wildcard $(srctree)/include/sec_feature/*)),)
 DHDCFLAGS += -DUSE_SECFEATURE
+endif
+
+# WiFi Kernel thread type
+DHDCFLAGS += -DUSE_KTHREAD_API
+
+############
+# JellyBean 
+############
+DHDCFLAGS += -DWL_ENABLE_P2P_IF
+DHDCFLAGS += -DMULTIPLE_SUPPLICANT
+DHDCFLAGS += -DWL_CFG80211_STA_EVENT
+
+
+ifneq ($(CONFIG_BCM4330),)
+  DHDCFLAGS += -DBCM4330_CHIP
+  DHDCFLAGS += -DMCAST_LIST_ACCUMULATION
+  DHDCFLAGS += -DCONFIG_CONTROL_PM
+  DHDCFLAGS += -DCUSTOM_GLOM_SETTING=0
+  DHDCFLAGS += -DPASS_ARP_PACKET
+  DHDCFLAGS += -DWL_CFG80211_VSDB_PRIORITIZE_SCAN_REQUEST
 endif
 
 ##############################################################
