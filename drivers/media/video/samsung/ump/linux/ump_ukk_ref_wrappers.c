@@ -89,7 +89,6 @@ int ump_allocate_wrapper(u32 __user * argument, struct ump_session_data  * sessi
 
 	return 0; /* success */
 }
-
 #ifdef CONFIG_ION_EXYNOS
 /*
  * IOCTL operation; Import fd to  UMP memory
