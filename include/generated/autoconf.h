@@ -12782,7 +12782,11 @@
 #define __enabled_CONFIG_PARPORT_GSC_MODULE 0
 #define __enabled_CONFIG_CSB726_CSB701 0
 #define __enabled_CONFIG_CSB726_CSB701_MODULE 0
+<<<<<<< Updated upstream
 #define CONFIG_LOCALVERSION "STi-2.32-JT"
+=======
+#define CONFIG_LOCALVERSION "STi-2.31-JT"
+>>>>>>> Stashed changes
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING 0
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING_MODULE 0
 #define __enabled_CONFIG_VIDEO_DAVINCI_VPIF 0
