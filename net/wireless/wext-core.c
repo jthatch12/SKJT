@@ -13,7 +13,6 @@
 #include <linux/slab.h>
 #include <linux/wireless.h>
 #include <linux/uaccess.h>
-#include <linux/module.h>
 #include <net/cfg80211.h>
 #include <net/iw_handler.h>
 #include <net/netlink.h>
@@ -256,7 +255,7 @@ static const struct iw_ioctl_description standard_ioctl[] = {
 		.max_tokens	= sizeof(struct iw_pmksa),
 	},
 };
-static const unsigned int standard_ioctl_num = ARRAY_SIZE(standard_ioctl);
+static const unsigned standard_ioctl_num = ARRAY_SIZE(standard_ioctl);
 
 /*
  * Meta-data about all the additional standard Wireless Extension events
@@ -306,7 +305,7 @@ static const struct iw_ioctl_description standard_event[] = {
 		.max_tokens	= sizeof(struct iw_pmkid_cand),
 	},
 };
-static const unsigned int standard_event_num = ARRAY_SIZE(standard_event);
+static const unsigned standard_event_num = ARRAY_SIZE(standard_event);
 
 /* Size (in bytes) of various events */
 static const int event_type_size[] = {
@@ -428,7 +427,7 @@ void wireless_send_event(struct net_device *	dev,
 	int hdr_len;				/* Size of the event header */
 	int wrqu_off = 0;			/* Offset in wrqu */
 	/* Don't "optimise" the following variable, it will crash */
-	unsigned int	cmd_index;		/* *MUST* be unsigned */
+	unsigned	cmd_index;		/* *MUST* be unsigned */
 	struct sk_buff *skb;
 	struct nlmsghdr *nlh;
 	struct nlattr *nla;
@@ -780,10 +779,8 @@ static int ioctl_standard_iw_point(struct iw_point *iwp, unsigned int cmd,
 		if (cmd == SIOCSIWENCODEEXT) {
 			struct iw_encode_ext *ee = (void *) extra;
 
-			if (iwp->length < sizeof(*ee) + ee->key_len) {
-				err = -EFAULT;
-				goto out;
-			}
+			if (iwp->length < sizeof(*ee) + ee->key_len)
+				return -EFAULT;
 		}
 	}
 

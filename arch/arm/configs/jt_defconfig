@@ -1,6 +1,10 @@
 #
 # Automatically generated file; DO NOT EDIT.
+<<<<<<< HEAD
 # Linux/arm 3.1.0-R71 Kernel Configuration
+=======
+# Linux/arm 3.1.0-R66 Kernel Configuration
+>>>>>>> parent of f9879bd... Should've merged earlier this week.  Most of this work is thanks to Dorimanx
 #
 CONFIG_ARM=y
 CONFIG_HAVE_PWM=y
@@ -37,6 +41,7 @@ CONFIG_EXPERIMENTAL=y
 CONFIG_INIT_ENV_ARG_LIMIT=32
 CONFIG_CROSS_COMPILE="-"
 <<<<<<< HEAD
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 CONFIG_LOCALVERSION="STi-2.32-JT"
 =======
@@ -45,6 +50,9 @@ CONFIG_LOCALVERSION="STi-2.31-JT"
 =======
 CONFIG_LOCALVERSION="STi-2.36EX6-JT"
 >>>>>>> 0cb8a5a91c4f91230550442798e39b1e7a01d4b8
+=======
+CONFIG_LOCALVERSION="STi-2.35EX3-JT"
+>>>>>>> parent of f9879bd... Should've merged earlier this week.  Most of this work is thanks to Dorimanx
 # CONFIG_LOCALVERSION_AUTO is not set
 CONFIG_HAVE_KERNEL_GZIP=y
 CONFIG_HAVE_KERNEL_LZMA=y
@@ -1214,7 +1222,6 @@ CONFIG_CFG80211_DEFAULT_PS=y
 CONFIG_CFG80211_WEXT=y
 CONFIG_WIRELESS_EXT_SYSFS=y
 # CONFIG_LIB80211 is not set
-# CONFIG_CFG80211_ALLOW_RECONNECT is not set
 # CONFIG_MAC80211 is not set
 # CONFIG_WIMAX is not set
 CONFIG_RFKILL=y
@@ -1447,12 +1454,11 @@ CONFIG_WLAN=y
 # CONFIG_USB_NET_RNDIS_WLAN is not set
 CONFIG_WIFI_CONTROL_FUNC=y
 # CONFIG_ATH_COMMON is not set
-CONFIG_BCM4330=m
 # CONFIG_BCM4334 is not set
+CONFIG_BCM4330=m
 # CONFIG_BCM43241 is not set
-CONFIG_BCMDHD_FW_PATH="/system/etc/firmware/fw_bcmdhd.bin"
-CONFIG_BCMDHD_NVRAM_PATH="/system/etc/wifi/bcmdhd.cal"
 CONFIG_BROADCOM_WIFI_RESERVED_MEM=y
+CONFIG_WLAN_COUNTRY_CODE=y
 CONFIG_WLAN_REGION_CODE=100
 # CONFIG_HOSTAP is not set
 # CONFIG_IWM is not set

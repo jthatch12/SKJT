@@ -1,7 +1,11 @@
 VERSION = 3
 PATCHLEVEL = 1
 SUBLEVEL = 0
+<<<<<<< HEAD
 EXTRAVERSION =-R71
+=======
+EXTRAVERSION =-R66
+>>>>>>> parent of f9879bd... Should've merged earlier this week.  Most of this work is thanks to Dorimanx
 NAME = "Divemaster Edition"
 
 # *DOCUMENTATION*
