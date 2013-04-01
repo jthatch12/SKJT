@@ -5,8 +5,6 @@
 #include <asm/setup.h>
 #include <asm/bios_ebda.h>
 
-#define BIOS_LOWMEM_KILOBYTES 0x413
-
 /*
  * The BIOS places the EBDA/XBDA at the top of conventional
  * memory, and usually decreases the reported amount of
@@ -16,17 +14,30 @@
  * chipset: reserve a page before VGA to prevent PCI prefetch
  * into it (errata #56). Usually the page is reserved anyways,
  * unless you have no PS/2 mouse plugged in.
+ *
+ * This functions is deliberately very conservative.  Losing
+ * memory in the bottom megabyte is rarely a problem, as long
+ * as we have enough memory to install the trampoline.  Using
+ * memory that is in use by the BIOS or by some DMA device
+ * the BIOS didn't shut down *is* a big problem.
  */
+
+#define BIOS_LOWMEM_KILOBYTES	0x413
+#define LOWMEM_CAP		0x9f000U	/* Absolute maximum */
+#define INSANE_CUTOFF		0x20000U	/* Less than this = insane */
+
 void __init reserve_ebda_region(void)
 {
 	unsigned int lowmem, ebda_addr;
 
-	/* To determine the position of the EBDA and the */
-	/* end of conventional memory, we need to look at */
-	/* the BIOS data area. In a paravirtual environment */
-	/* that area is absent. We'll just have to assume */
-	/* that the paravirt case can handle memory setup */
-	/* correctly, without our help. */
+	/*
+	 * To determine the position of the EBDA and the
+	 * end of conventional memory, we need to look at
+	 * the BIOS data area. In a paravirtual environment
+	 * that area is absent. We'll just have to assume
+	 * that the paravirt case can handle memory setup
+	 * correctly, without our help.
+	 */
 	if (paravirt_enabled())
 		return;
 

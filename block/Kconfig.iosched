@@ -101,6 +101,10 @@ config IOSCHED_FIFO
 	  Fifo is similar to no-op I/O scheduler and it's a minimal scheduler that does basic merging
 	  and sorting. Ported from: https://github.com/AndroidDeveloperAlliance/ZenKernel_TUNA/blob/master/block/fifo-iosched.c
 
+config IOSCHED_LIFO
+	bool
+	default y
+
 config CGROUP_BFQIO
 	bool "BFQ hierarchical scheduling support"
 	depends on CGROUPS && IOSCHED_BFQ=y
@@ -154,6 +158,9 @@ choice
 	config DEFAULT_FIFO
 		bool "fifo"
 
+	config DEFAULT_LIFO
+		bool "lifo"
+
 endchoice
 
 config DEFAULT_IOSCHED
@@ -168,6 +175,7 @@ config DEFAULT_IOSCHED
 	default "zen" if DEFAULT_ZEN
 	default "noop" if DEFAULT_NOOP
 	default "fifo" if DEFAULT_FIFO
+	default "lifo" if DEFAULT_LIFO
 
 endmenu
 

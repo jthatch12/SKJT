@@ -134,9 +134,9 @@ chmod 755 ${INITRAMFS_TMP}/lib/modules/*
 rm $INITRAMFS_TMP/lib/modules/Si4709_driver.ko
 
 if [ $USER != "root" ]; then
-	make -j${NAMBEROFCPUS} zImage CONFIG_INITRAMFS_SOURCE="${INITRAMFS_TMP}"
+	time make -j${NAMBEROFCPUS} zImage CONFIG_INITRAMFS_SOURCE="${INITRAMFS_TMP}"
 else
-	nice -n -15 make -j${NAMBEROFCPUS} zImage CONFIG_INITRAMFS_SOURCE="${INITRAMFS_TMP}"
+	time nice -n -15 make -j${NAMBEROFCPUS} zImage CONFIG_INITRAMFS_SOURCE="${INITRAMFS_TMP}"
 fi;
 
 # restore clean arch/arm/boot/compressed/Makefile_clean till next time
