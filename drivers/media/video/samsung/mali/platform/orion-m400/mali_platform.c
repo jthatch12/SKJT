@@ -1,4 +1,5 @@
-/* Copyright (C) 2010-2012 ARM Limited. All rights reserved.
+/*
+ * Copyright (C) 2010-2012 ARM Limited. All rights reserved.
  *
  * This program is free software and is provided to you under the terms of the GNU General Public License version 2
  * as published by the Free Software Foundation, and any use by you of this program is subject to the terms of such GNU licence.
@@ -386,6 +387,8 @@ static mali_bool init_mali_clock(void)
 {
 	mali_bool ret = MALI_TRUE;
 
+	gpu_power_state = 0;
+
 	if (mali_clock != 0)
 		return ret; // already initialized
 
@@ -460,6 +463,7 @@ static mali_bool deinit_mali_clock(void)
 
 	return MALI_TRUE;
 }
+
 
 static _mali_osk_errcode_t enable_mali_clocks(void)
 {
@@ -584,7 +588,7 @@ _mali_osk_errcode_t mali_platform_init()
 		MALI_DEBUG_PRINT(1, ("mali_platform_init failed\n"));
 #endif
 
-	MALI_SUCCESS;
+    MALI_SUCCESS;
 }
 
 _mali_osk_errcode_t mali_platform_deinit()
@@ -601,7 +605,7 @@ _mali_osk_errcode_t mali_platform_deinit()
 	}
 #endif
 
-	MALI_SUCCESS;
+    MALI_SUCCESS;
 }
 
 _mali_osk_errcode_t mali_platform_powerdown(u32 cores)

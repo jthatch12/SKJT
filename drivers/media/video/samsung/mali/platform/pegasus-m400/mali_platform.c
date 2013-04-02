@@ -357,7 +357,7 @@ mali_bool mali_clk_set_rate(unsigned int clk, unsigned int mhz)
 #if !MALI_DVFS_ENABLED
 	clk = mali_gpu_clk;
 #endif
-
+	trace_printk("SPI_GPUFREQ_%uMHz\n", mali_gpu_clk);
 	_mali_osk_lock_wait(mali_dvfs_lock, _MALI_OSK_LOCKMODE_RW);
 
 	if (mali_clk_get(bis_vpll) == MALI_FALSE)
@@ -537,7 +537,7 @@ static _mali_osk_errcode_t disable_mali_clocks(void)
 	clk_disable(mali_clock);
 	MALI_DEBUG_PRINT(3,("disable_mali_clocks mali_clock %p \n", mali_clock));
 
-#if MALI_DVFS_ENABLED
+#if MALI_DVFS_ENABLED && CPUFREQ_LOCK_DURING_440
 	/* lock/unlock CPU freq by Mali */
 	cpufreq_unlock_by_mali();
 #endif
@@ -642,6 +642,7 @@ _mali_osk_errcode_t mali_platform_deinit()
 
 _mali_osk_errcode_t mali_platform_powerdown(u32 cores)
 {
+	trace_printk("SPI_GPU_PWR Idle\n");
 	MALI_DEBUG_PRINT(3,("power down is called in mali_platform_powerdown state %x core %x \n", gpu_power_state, cores));
 
 	if (gpu_power_state != 0) // power down after state is 0
@@ -663,6 +664,7 @@ _mali_osk_errcode_t mali_platform_powerdown(u32 cores)
 
 _mali_osk_errcode_t mali_platform_powerup(u32 cores)
 {
+	trace_printk("SPI_GPU_PWR Start\n");
 	MALI_DEBUG_PRINT(3,("power up is called in mali_platform_powerup state %x core %x \n", gpu_power_state, cores));
 
 	if (gpu_power_state == 0) // power up only before state is 0

@@ -11248,6 +11248,8 @@
 #define __enabled_CONFIG_COMEDI_PCI_DRIVERS_MODULE 0
 #define __enabled_CONFIG_SENSORS_MAX6639 0
 #define __enabled_CONFIG_SENSORS_MAX6639_MODULE 0
+#define __enabled_CONFIG_DEFAULT_LIFO 0
+#define __enabled_CONFIG_DEFAULT_LIFO_MODULE 0
 #define __enabled_CONFIG_TOUCHSCREEN_ATMEL_MXT224_GC 0
 #define __enabled_CONFIG_TOUCHSCREEN_ATMEL_MXT224_GC_MODULE 0
 #define __enabled_CONFIG_IWLWIFI_DEBUG 0
@@ -12782,11 +12784,7 @@
 #define __enabled_CONFIG_PARPORT_GSC_MODULE 0
 #define __enabled_CONFIG_CSB726_CSB701 0
 #define __enabled_CONFIG_CSB726_CSB701_MODULE 0
-<<<<<<< Updated upstream
-#define CONFIG_LOCALVERSION "STi-2.32-JT"
-=======
-#define CONFIG_LOCALVERSION "STi-2.31-JT"
->>>>>>> Stashed changes
+#define CONFIG_LOCALVERSION "STi-2.36EX9-JT"
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING 0
 #define __enabled_CONFIG_NCPFS_IOCTL_LOCKING_MODULE 0
 #define __enabled_CONFIG_VIDEO_DAVINCI_VPIF 0
@@ -13463,6 +13461,9 @@
 #define CONFIG_NF_CT_PROTO_SCTP 1
 #define __enabled_CONFIG_SND_CMI8330 0
 #define __enabled_CONFIG_SND_CMI8330_MODULE 0
+#define __enabled_CONFIG_IOSCHED_LIFO 1
+#define __enabled_CONFIG_IOSCHED_LIFO_MODULE 0
+#define CONFIG_IOSCHED_LIFO 1
 #define __enabled_CONFIG_USB_SERIAL_VISOR 0
 #define __enabled_CONFIG_USB_SERIAL_VISOR_MODULE 0
 #define __enabled_CONFIG_USB_IMX 0

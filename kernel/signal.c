@@ -438,12 +438,6 @@ flush_signal_handlers(struct task_struct *t, int force_default)
 		if (force_default || ka->sa.sa_handler != SIG_IGN)
 			ka->sa.sa_handler = SIG_DFL;
 		ka->sa.sa_flags = 0;
-<<<<<<< HEAD
-#ifdef __ARCH_HAS_SA_RESTORER
-		ka->sa.sa_restorer = NULL;
-#endif
-=======
->>>>>>> parent of f9879bd... Should've merged earlier this week.  Most of this work is thanks to Dorimanx
 		sigemptyset(&ka->sa.sa_mask);
 		ka++;
 	}

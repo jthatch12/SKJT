@@ -20,7 +20,7 @@
  * derived from this software.  The special exception does not apply to any
  * modifications of the software.
  *
- *      Notwithstanding the above, under no circumstances may you combine this
+ *      Notwithstanding the abe, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
@@ -93,10 +93,10 @@ enum dhd_bus_state {
 #define DHD_SCAN_PASSIVE_TIME	130 /* ms: Embedded default Passive setting from DHD Driver */
 
 #ifndef POWERUP_MAX_RETRY
-#define POWERUP_MAX_RETRY	(10) /* how many times we retry to power up the chip */
+#define POWERUP_MAX_RETRY	8 /* how many times we retry to power up the chip */
 #endif
 #ifndef POWERUP_WAIT_MS
-#define POWERUP_WAIT_MS		(2000) /* ms: time out in waiting wifi to come up */
+#define POWERUP_WAIT_MS		2500 /* ms: time out in waiting wifi to come up */
 #endif
 
 enum dhd_bus_wake_state {
