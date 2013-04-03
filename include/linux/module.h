@@ -26,9 +26,11 @@
 #define MODULE_SUPPORTED_DEVICE(name)
 
 /* Some toolchains use a `_' prefix for all user symbols. */
-
+#ifdef CONFIG_SYMBOL_PREFIX
+#define MODULE_SYMBOL_PREFIX CONFIG_SYMBOL_PREFIX
+#else
 #define MODULE_SYMBOL_PREFIX ""
-
+#endif
 
 #define MODULE_NAME_LEN MAX_PARAM_PREFIX_LEN
 

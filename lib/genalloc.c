@@ -33,6 +33,7 @@ struct gen_pool_chunk {
 	unsigned long bits[0];		/* bitmap for allocating memory chunk */
 };
 
+
 /**
  * gen_pool_create() - create a new special memory pool
  * @order:	Log base 2 of number of bytes each bitmap bit
@@ -62,25 +63,26 @@ EXPORT_SYMBOL(gen_pool_create);
 
 /**
  * gen_pool_add_virt - add a new chunk of special memory to the pool
- * @pool: pool to add new memory chunk to
- * @virt: virtual starting address of memory chunk to add to pool
- * @phys: physical starting address of memory chunk to add to pool
- * @size: size in bytes of the memory chunk to add to pool
- * @nid: node id of the node the chunk structure and bitmap should be
- *       allocated on, or -1
+ * @pool:	Pool to add new memory chunk to
+ * @virt:	Virtual starting address of memory chunk to add to pool
+ * @phys:	Physical starting address of memory chunk to add to pool
+ * @size:	Size in bytes of the memory chunk to add to pool
+ * @nid:	Node id of the node the chunk structure and bitmap should be
+ *       	allocated on, or -1
  *
  * Add a new chunk of special memory to the specified pool.
  *
  * Returns 0 on success or a -ve errno on failure.
  */
-int __must_check gen_pool_add_virt(struct gen_pool *pool, unsigned long virt, phys_addr_t phys,
-		 size_t size, int nid)
+int __must_check
+gen_pool_add_virt(struct gen_pool *pool, unsigned long virt, phys_addr_t phys,
+		  size_t size, int nid)
 {
 	struct gen_pool_chunk *chunk;
 	size_t nbytes;
 
 	if (WARN_ON(!virt || virt + size < virt ||
-	    (virt & ((1 << pool->order) - 1))))
+		    (virt & ((1 << pool->order) - 1))))
 		return -EINVAL;
 
 	size = size >> pool->order;
@@ -119,11 +121,12 @@ phys_addr_t gen_pool_virt_to_phys(struct gen_pool *pool, unsigned long addr)
 
 	read_lock(&pool->lock);
 	list_for_each(_chunk, &pool->chunks) {
+		unsigned long start_addr;
 		chunk = list_entry(_chunk, struct gen_pool_chunk, next_chunk);
 
-		if (addr >= chunk->start &&
-		    addr < (chunk->start + chunk->size))
-			return chunk->phys_addr + addr - chunk->start;
+		start_addr = chunk->start << pool->order;
+		if (addr >= start_addr && addr < start_addr + chunk->size)
+			return chunk->phys_addr + addr - start_addr;
 	}
 	read_unlock(&pool->lock);
 
