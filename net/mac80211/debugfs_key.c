@@ -276,7 +276,7 @@ void ieee80211_debugfs_key_update_default(struct ieee80211_sub_if_data *sdata)
 	char buf[50];
 	struct ieee80211_key *key;
 
-	if (!sdata->debugfs.dir)
+	if (!sdata->vif.debugfs_dir)
 		return;
 
 	lockdep_assert_held(&sdata->local->key_mtx);
@@ -311,7 +311,7 @@ void ieee80211_debugfs_key_add_mgmt_default(struct ieee80211_sub_if_data *sdata)
 	char buf[50];
 	struct ieee80211_key *key;
 
-	if (!sdata->debugfs.dir)
+	if (!sdata->vif.debugfs_dir)
 		return;
 
 	key = key_mtx_dereference(sdata->local,
@@ -320,7 +320,7 @@ void ieee80211_debugfs_key_add_mgmt_default(struct ieee80211_sub_if_data *sdata)
 		sprintf(buf, "../keys/%d", key->debugfs.cnt);
 		sdata->debugfs.default_mgmt_key =
 			debugfs_create_symlink("default_mgmt_key",
-					       sdata->debugfs.dir, buf);
+					       sdata->vif.debugfs_dir, buf);
 	} else
 		ieee80211_debugfs_key_remove_mgmt_default(sdata);
 }

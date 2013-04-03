@@ -34,6 +34,27 @@
 #endif
 #endif
 
+/*
+ * If moviNAND VHX 4.41 device
+ * enable PON to force.
+ */
+#define CHECK_MOVI_VHX4_41				\
+	(card->ext_csd.rev == 5 && card->movi_fwver >= 0x1C)
+
+/*
+ * If moviNAND VHX 4.5 device
+ * enable PON to force.
+ */
+#define CHECK_MOVI_VHX4_5				\
+	(card->ext_csd.rev == 6 && card->movi_fwver >= 0x0A)
+
+#define CHECK_MOVI_PON_SUPPORT				\
+	(card->cid.manfid == 0x15 &&			\
+	 ext_csd[EXT_CSD_VENDOR_SPECIFIC_FIELD] & 0x2)
+
+#define CHECK_PON_ENABLE				\
+	(card->ext_csd.feature_support & MMC_POWEROFF_NOTIFY_FEATURE)
+
 static const unsigned int tran_exp[] = {
 	10000,		100000,		1000000,	10000000,
 	0,		0,		0,		0
@@ -331,6 +352,7 @@ static int mmc_get_ext_csd(struct mmc_card *card, u8 **new_ext_csd)
 static int mmc_read_ext_csd(struct mmc_card *card, u8 *ext_csd)
 {
 	int err = 0;
+	int movi_ver_check = 0;
 
 	BUG_ON(!card);
 
@@ -1131,22 +1153,20 @@ static int mmc_init_card(struct mmc_host *host, u32 ocr,
 	 * set the notification byte in the ext_csd register of device
 	 */
 	if ((host->caps2 & MMC_CAP2_POWEROFF_NOTIFY) &&
-	    (card->ext_csd.rev >= 6)) {
+	    ((card->ext_csd.rev >= 5) && CHECK_PON_ENABLE)) {
 		err = mmc_switch(card, EXT_CSD_CMD_SET_NORMAL,
 				 EXT_CSD_POWER_OFF_NOTIFICATION,
 				 EXT_CSD_POWER_ON,
 				 card->ext_csd.generic_cmd6_time);
 		if (err && err != -EBADMSG)
 			goto free_card;
-	}
-
-	if (!err && (host->caps2 & MMC_CAP2_POWEROFF_NOTIFY))
 		/*
 		 * The err can be -EBADMSG or 0,
 		 * so check for success and update the flag
 		 */
 		if (!err)
 			card->poweroff_notify_state = MMC_POWERED_ON;
+	}
 
 	/*
 	 * Activate high speed (if supported)
@@ -1497,7 +1517,7 @@ static int mmc_suspend(struct mmc_host *host)
 		if (!err)
 			mmc_card_set_sleep(host->card);
 	} else if (!mmc_host_is_spi(host))
-		mmc_deselect_cards(host);
+		err = mmc_deselect_cards(host);
 	host->card->state &= ~(MMC_STATE_HIGHSPEED | MMC_STATE_HIGHSPEED_200);
 	mmc_release_host(host);
 

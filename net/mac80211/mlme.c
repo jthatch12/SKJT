@@ -743,6 +743,7 @@ void ieee80211_dynamic_ps_disable_work(struct work_struct *work)
 	}
 
 	ieee80211_wake_queues_by_reason(&local->hw,
+					IEEE80211_MAX_QUEUE_MAP,
 					IEEE80211_QUEUE_STOP_REASON_PS);
 }
 
@@ -792,7 +793,7 @@ void ieee80211_dynamic_ps_enable_work(struct work_struct *work)
 		else {
 			ieee80211_send_nullfunc(local, sdata, 1);
 			/* Flush to get the tx status of nullfunc frame */
-			drv_flush(local, false);
+			ieee80211_flush_queues(local, sdata);
 		}
 	}
 

@@ -563,7 +563,7 @@ int carl9170_led_set_state(struct ar9170 *ar, const u32 led_state);
 
 /* PHY / RF */
 int carl9170_set_channel(struct ar9170 *ar, struct ieee80211_channel *channel,
-	enum nl80211_channel_type bw, enum carl9170_rf_init_mode rfi);
+			 enum nl80211_channel_type bw);
 int carl9170_get_noisefloor(struct ar9170 *ar);
 
 /* FW */

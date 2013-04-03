@@ -179,8 +179,6 @@ static void hci_cc_write_def_link_policy(struct hci_dev *hdev, struct sk_buff *s
 
 	if (!status)
 		hdev->link_policy = get_unaligned_le16(sent);
-
-	hci_req_complete(hdev, HCI_OP_WRITE_DEF_LINK_POLICY, status);
 }
 
 static void hci_cc_reset(struct hci_dev *hdev, struct sk_buff *skb)
@@ -268,8 +266,6 @@ static void hci_cc_write_encrypt_mode(struct hci_dev *hdev, struct sk_buff *skb)
 		else
 			clear_bit(HCI_ENCRYPT, &hdev->flags);
 	}
-
-	hci_req_complete(hdev, HCI_OP_WRITE_ENCRYPT_MODE, status);
 }
 
 static void hci_cc_write_scan_enable(struct hci_dev *hdev, struct sk_buff *skb)
@@ -2072,8 +2068,10 @@ static inline void hci_cmd_status_evt(struct hci_dev *hdev, struct sk_buff *skb)
 		break;
 	}
 
-	if (ev->opcode != HCI_OP_NOP)
+	if (opcode != HCI_OP_NOP)
 		del_timer(&hdev->cmd_timer);
+
+	hci_req_cmd_complete(hdev, opcode, status);
 
 	if (ev->ncmd && !test_bit(HCI_RESET, &hdev->flags)) {
 		atomic_set(&hdev->cmd_cnt, 1);
@@ -2991,14 +2989,6 @@ void hci_event_packet(struct hci_dev *hdev, struct sk_buff *skb)
 		hci_remote_features_evt(hdev, skb);
 		break;
 
-	case HCI_EV_REMOTE_VERSION:
-		hci_remote_version_evt(hdev, skb);
-		break;
-
-	case HCI_EV_QOS_SETUP_COMPLETE:
-		hci_qos_setup_complete_evt(hdev, skb);
-		break;
-
 	case HCI_EV_CMD_COMPLETE:
 		hci_cmd_complete_evt(hdev, skb);
 		break;
@@ -3053,14 +3043,6 @@ void hci_event_packet(struct hci_dev *hdev, struct sk_buff *skb)
 
 	case HCI_EV_SYNC_CONN_COMPLETE:
 		hci_sync_conn_complete_evt(hdev, skb);
-		break;
-
-	case HCI_EV_SYNC_CONN_CHANGED:
-		hci_sync_conn_changed_evt(hdev, skb);
-		break;
-
-	case HCI_EV_SNIFF_SUBRATE:
-		hci_sniff_subrate_evt(hdev, skb);
 		break;
 
 	case HCI_EV_EXTENDED_INQUIRY_RESULT:

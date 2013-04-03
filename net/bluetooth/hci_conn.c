@@ -130,7 +130,7 @@ static void hci_acl_connect_cancel(struct hci_conn *conn)
 	hci_send_cmd(conn->hdev, HCI_OP_CREATE_CONN_CANCEL, sizeof(cp), &cp);
 }
 
-void hci_acl_disconn(struct hci_conn *conn, __u8 reason)
+void hci_disconnect(struct hci_conn *conn, __u8 reason)
 {
 	struct hci_cp_disconnect cp;
 

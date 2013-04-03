@@ -229,11 +229,11 @@ void ieee80211_set_default_mgmt_key(struct ieee80211_sub_if_data *sdata,
 }
 
 
-static void __ieee80211_key_replace(struct ieee80211_sub_if_data *sdata,
-				    struct sta_info *sta,
-				    bool pairwise,
-				    struct ieee80211_key *old,
-				    struct ieee80211_key *new)
+static void ieee80211_key_replace(struct ieee80211_sub_if_data *sdata,
+				  struct sta_info *sta,
+				  bool pairwise,
+				  struct ieee80211_key *old,
+				  struct ieee80211_key *new)
 {
 	int idx;
 	bool defunikey, defmultikey, defmgmtkey;

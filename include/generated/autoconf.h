@@ -13652,6 +13652,9 @@
 #define __enabled_CONFIG_APPLE_AIRPORT_MODULE 0
 #define __enabled_CONFIG_MACH_D2NET 0
 #define __enabled_CONFIG_MACH_D2NET_MODULE 0
+#define __enabled_CONFIG_MMC_MSHCI_ENABLE_CACHE 1
+#define __enabled_CONFIG_MMC_MSHCI_ENABLE_CACHE_MODULE 0
+#define CONFIG_MMC_MSHCI_ENABLE_CACHE 1
 #define __enabled_CONFIG_MXM_WMI 0
 #define __enabled_CONFIG_MXM_WMI_MODULE 0
 #define __enabled_CONFIG_FONT_8x16 0

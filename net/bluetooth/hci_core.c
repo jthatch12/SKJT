@@ -412,9 +412,10 @@ static int inquiry_cache_dump(struct hci_dev *hdev, int num, __u8 *buf)
 	return copied;
 }
 
-static void hci_inq_req(struct hci_dev *hdev, unsigned long opt)
+static void hci_inq_req(struct hci_request *req, unsigned long opt)
 {
 	struct hci_inquiry_req *ir = (struct hci_inquiry_req *) opt;
+	struct hci_dev *hdev = req->hdev;
 	struct hci_cp_inquiry cp;
 
 	BT_DBG("%s", hdev->name);
@@ -426,7 +427,7 @@ static void hci_inq_req(struct hci_dev *hdev, unsigned long opt)
 	memcpy(&cp.lap, &ir->lap, 3);
 	cp.length  = ir->length;
 	cp.num_rsp = ir->num_rsp;
-	hci_send_cmd(hdev, HCI_OP_INQUIRY, sizeof(cp), &cp);
+	hci_req_add(req, HCI_OP_INQUIRY, sizeof(cp), &cp);
 }
 
 int hci_inquiry(void __user *arg)
@@ -457,7 +458,8 @@ int hci_inquiry(void __user *arg)
 	timeo = ir.length * msecs_to_jiffies(2000);
 
 	if (do_inquiry) {
-		err = hci_request(hdev, hci_inq_req, (unsigned long)&ir, timeo);
+		err = hci_req_sync(hdev, hci_inq_req, (unsigned long) &ir,
+				   timeo);
 		if (err < 0)
 			goto done;
 	}
@@ -1950,6 +1952,34 @@ int hci_send_cmd(struct hci_dev *hdev, __u16 opcode, __u32 plen, void *param)
 	tasklet_schedule(&hdev->cmd_task);
 
 	return 0;
+}
+
+/* Queue a command to an asynchronous HCI request */
+void hci_req_add(struct hci_request *req, u16 opcode, u32 plen, void *param)
+{
+	struct hci_dev *hdev = req->hdev;
+	struct sk_buff *skb;
+
+	BT_DBG("%s opcode 0x%4.4x plen %d", hdev->name, opcode, plen);
+
+	/* If an error occured during request building, there is no point in
+	 * queueing the HCI command. We can simply return.
+	 */
+	if (req->err)
+		return;
+
+	skb = hci_prepare_cmd(hdev, opcode, plen, param);
+	if (!skb) {
+		BT_ERR("%s no memory for command (opcode 0x%4.4x)",
+		       hdev->name, opcode);
+		req->err = -ENOMEM;
+		return;
+	}
+
+	if (skb_queue_empty(&req->cmd_q))
+		bt_cb(skb)->req.start = true;
+
+	skb_queue_tail(&req->cmd_q, skb);
 }
 
 /* Get data from the previously sent command */

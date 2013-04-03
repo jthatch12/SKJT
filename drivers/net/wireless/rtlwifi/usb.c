@@ -303,6 +303,8 @@ static int _rtl_usb_init_tx(struct ieee80211_hw *hw)
 	return 0;
 }
 
+static void _rtl_rx_work(unsigned long param);
+
 static int _rtl_usb_init_rx(struct ieee80211_hw *hw)
 {
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
@@ -543,15 +545,70 @@ static void _rtl_rx_pre_process(struct ieee80211_hw *hw, struct sk_buff *skb)
 	while (!skb_queue_empty(&rx_queue)) {
 		_skb = skb_dequeue(&rx_queue);
 		_rtl_usb_rx_process_agg(hw, _skb);
-		ieee80211_rx_irqsafe(hw, _skb);
+		ieee80211_rx(hw, _skb);
 	}
 }
 
+#define __RX_SKB_MAX_QUEUED	32
+
+static void _rtl_rx_work(unsigned long param)
+{
+	struct rtl_usb *rtlusb = (struct rtl_usb *)param;
+	struct ieee80211_hw *hw = usb_get_intfdata(rtlusb->intf);
+	struct sk_buff *skb;
+
+	while ((skb = skb_dequeue(&rtlusb->rx_queue))) {
+		if (unlikely(IS_USB_STOP(rtlusb))) {
+			dev_kfree_skb_any(skb);
+			continue;
+		}
+
+		if (likely(!rtlusb->usb_rx_segregate_hdl)) {
+			_rtl_usb_rx_process_noagg(hw, skb);
+		} else {
+			/* TO DO */
+			_rtl_rx_pre_process(hw, skb);
+			pr_err("rx agg not supported\n");
+		}
+	}
+}
+
+static unsigned int _rtl_rx_get_padding(struct ieee80211_hdr *hdr,
+					unsigned int len)
+{
+	unsigned int padding = 0;
+
+	/* make function no-op when possible */
+	if (NET_IP_ALIGN == 0 || len < sizeof(*hdr))
+		return 0;
+
+	/* alignment calculation as in lbtf_rx() / carl9170_rx_copy_data() */
+	/* TODO: deduplicate common code, define helper function instead? */
+
+	if (ieee80211_is_data_qos(hdr->frame_control)) {
+		u8 *qc = ieee80211_get_qos_ctl(hdr);
+
+		padding ^= NET_IP_ALIGN;
+
+		/* Input might be invalid, avoid accessing memory outside
+		 * the buffer.
+		 */
+		if ((unsigned long)qc - (unsigned long)hdr < len &&
+		    *qc & IEEE80211_QOS_CTL_A_MSDU_PRESENT)
+			padding ^= NET_IP_ALIGN;
+	}
+
+	if (ieee80211_has_a4(hdr->frame_control))
+		padding ^= NET_IP_ALIGN;
+
+	return padding;
+}
+
+#define __RADIO_TAP_SIZE_RSV	32
+
 static void _rtl_rx_completed(struct urb *_urb)
 {
-	struct sk_buff *skb = (struct sk_buff *)_urb->context;
-	struct ieee80211_tx_info *info = IEEE80211_SKB_CB(skb);
-	struct rtl_usb *rtlusb = (struct rtl_usb *)info->rate_driver_data[0];
+	struct rtl_usb *rtlusb = (struct rtl_usb *)_urb->context;
 	struct ieee80211_hw *hw = usb_get_intfdata(rtlusb->intf);
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
 	int err = 0;
@@ -597,9 +654,6 @@ static void _rtl_rx_completed(struct urb *_urb)
 	}
 
 resubmit:
-	skb_reset_tail_pointer(skb);
-	skb_trim(skb, 0);
-
 	usb_anchor_urb(_urb, &rtlusb->rx_submitted);
 	err = usb_submit_urb(_urb, GFP_ATOMIC);
 	if (unlikely(err)) {
@@ -609,13 +663,34 @@ resubmit:
 	return;
 
 free:
-	dev_kfree_skb_irq(skb);
+	/* On some architectures, usb_free_coherent must not be called from
+	 * hardirq context. Queue urb to cleanup list.
+	 */
+	usb_anchor_urb(_urb, &rtlusb->rx_cleanup_urbs);
+}
+
+#undef __RADIO_TAP_SIZE_RSV
+
+static void _rtl_usb_cleanup_rx(struct ieee80211_hw *hw)
+{
+	struct rtl_usb *rtlusb = rtl_usbdev(rtl_usbpriv(hw));
+	struct urb *urb;
+
+	usb_kill_anchored_urbs(&rtlusb->rx_submitted);
+
+	tasklet_kill(&rtlusb->rx_work_tasklet);
+	skb_queue_purge(&rtlusb->rx_queue);
+
+	while ((urb = usb_get_from_anchor(&rtlusb->rx_cleanup_urbs))) {
+		usb_free_coherent(urb->dev, urb->transfer_buffer_length,
+				urb->transfer_buffer, urb->transfer_dma);
+		usb_free_urb(urb);
+	}
 }
 
 static int _rtl_usb_receive(struct ieee80211_hw *hw)
 {
 	struct urb *urb;
-	struct sk_buff *skb;
 	int err;
 	int i;
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
@@ -652,6 +727,7 @@ static int _rtl_usb_receive(struct ieee80211_hw *hw)
 
 err_out:
 	usb_kill_anchored_urbs(&rtlusb->rx_submitted);
+	_rtl_usb_cleanup_rx(hw);
 	return err;
 }
 
@@ -691,7 +767,7 @@ static void rtl_usb_cleanup(struct ieee80211_hw *hw)
 	SET_USB_STOP(rtlusb);
 
 	/* clean up rx stuff. */
-	usb_kill_anchored_urbs(&rtlusb->rx_submitted);
+	_rtl_usb_cleanup_rx(hw);
 
 	/* clean up tx stuff */
 	for (i = 0; i < RTL_USB_MAX_EP_NUM; i++) {

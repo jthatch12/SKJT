@@ -277,12 +277,10 @@ static inline void rfcomm_dlc_unthrottle(struct rfcomm_dlc *d)
 /* ---- RFCOMM sessions ---- */
 void   rfcomm_session_getaddr(struct rfcomm_session *s, bdaddr_t *src,
 								bdaddr_t *dst);
-
 static inline void rfcomm_session_hold(struct rfcomm_session *s)
 {
 	atomic_inc(&s->refcnt);
 }
-
 /* ---- RFCOMM sockets ---- */
 struct sockaddr_rc {
 	sa_family_t	rc_family;

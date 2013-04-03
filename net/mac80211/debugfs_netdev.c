@@ -466,7 +466,7 @@ static void add_mesh_stats(struct ieee80211_sub_if_data *sdata)
 static void add_mesh_config(struct ieee80211_sub_if_data *sdata)
 {
 	struct dentry *dir = debugfs_create_dir("mesh_config",
-						sdata->debugfs.dir);
+						sdata->vif.debugfs_dir);
 
 #define MESHPARAMS_ADD(name) \
 	debugfs_create_file(#name, 0600, dir, sdata, &name##_ops);
@@ -530,21 +530,21 @@ void ieee80211_debugfs_add_netdev(struct ieee80211_sub_if_data *sdata)
 	char buf[10+IFNAMSIZ];
 
 	sprintf(buf, "netdev:%s", sdata->name);
-	sdata->debugfs.dir = debugfs_create_dir(buf,
+	sdata->vif.debugfs_dir = debugfs_create_dir(buf,
 		sdata->local->hw.wiphy->debugfsdir);
-	if (sdata->debugfs.dir)
+	if (sdata->vif.debugfs_dir)
 		sdata->debugfs.subdir_stations = debugfs_create_dir("stations",
-			sdata->debugfs.dir);
+			sdata->vif.debugfs_dir);
 	add_files(sdata);
 }
 
 void ieee80211_debugfs_remove_netdev(struct ieee80211_sub_if_data *sdata)
 {
-	if (!sdata->debugfs.dir)
+	if (!sdata->vif.debugfs_dir)
 		return;
 
-	debugfs_remove_recursive(sdata->debugfs.dir);
-	sdata->debugfs.dir = NULL;
+	debugfs_remove_recursive(sdata->vif.debugfs_dir);
+	sdata->vif.debugfs_dir = NULL;
 }
 
 void ieee80211_debugfs_rename_netdev(struct ieee80211_sub_if_data *sdata)
@@ -552,7 +552,7 @@ void ieee80211_debugfs_rename_netdev(struct ieee80211_sub_if_data *sdata)
 	struct dentry *dir;
 	char buf[10 + IFNAMSIZ];
 
-	dir = sdata->debugfs.dir;
+	dir = sdata->vif.debugfs_dir;
 
 	if (!dir)
 		return;
