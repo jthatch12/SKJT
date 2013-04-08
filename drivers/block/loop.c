@@ -839,6 +839,11 @@ static int loop_set_fd(struct loop_device *lo, fmode_t mode,
 	wake_up_process(lo->lo_thread);
 	if (max_part > 0)
 		ioctl_by_bdev(bdev, BLKRRPART, 0);
+
+	/* Grab the block_device to prevent its destruction after we
+	 * put /dev/loopXX inode. Later in loop_clr_fd() we bdput(bdev).
+	 */
+	bdgrab(bdev);
 	return 0;
 
 out_clr:
