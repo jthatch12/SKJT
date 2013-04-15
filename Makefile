@@ -1,7 +1,7 @@
 VERSION = 3
 PATCHLEVEL = 1
 SUBLEVEL = 0
-EXTRAVERSION = -R72
+EXTRAVERSION = -R66
 NAME = "Divemaster Edition"
 
 # *DOCUMENTATION*
@@ -355,9 +355,10 @@ CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 LOW_ARM_FLAGS	= -pipe -march=armv7-a -mtune=cortex-a9 \
 		  -mfpu=neon -mfloat-abi=softfp \
 		  -funsafe-math-optimizations \
-		  -ftree-vectorize -mvectorize-with-neon-quad
+		  -mvectorize-with-neon-quad
 
-#ARM_FLAGS      = -marm -fsingle-precision-constant
+#ARM_FLAGS       = -pipe -marm -march=armv7-a -mtune=cortex-a9 \
+		   -fsingle-precision-constant -mvectorize-with-neon-quad
 #LOOPS		= -funswitch-loops -fpredictive-commoning
 #LOOPS_4_6	= -floop-strip-mine -floop-block -floop-interchange
 
